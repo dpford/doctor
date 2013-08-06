@@ -22,6 +22,9 @@ MOVEDOWNFREQ = 0.1
 XMARGIN = int((WINDOWWIDTH - BOARDWIDTH * BOXSIZE) / 2)
 TOPMARGIN = WINDOWHEIGHT - (BOARDHEIGHT * BOXSIZE) -5
 
+WHITE = (255, 255, 255)
+GRAY = (185, 185, 185)
+BLACK = (0, 0, 0)
 RED = (155, 0, 0)
 LIGHTRED = (175, 20, 20)
 BLUE = (0, 0, 155)
@@ -29,6 +32,10 @@ LIGHTBLUE = (20, 20, 175)
 YELLOW = (155, 155, 0)
 LIGHTYELLOW = (175, 175, 20)
 
+BORDERCOLOR = BLUE
+BGCOLOR = BLACK
+TEXTCOLOR = WHITE
+TEXTSHADOWCOLOR = GRAY
 COLORS = (RED, BLUE, YELLOW)
 LIGHTCOLORS = (LIGHTRED, LIGHTBLUE, LIGHTYELLOW)
 assert len(COLORS) == len(LIGHTCOLORS)
@@ -37,7 +44,7 @@ TEMPLATEWIDTH = 2
 TEMPLATEHEIGHT = 2
 BLANK = '.'
 
-ORIENTATION = [['..',
+ORIENTATION = [	  ['..',
 				   'AB'],
 				  ['.B',
 				   '.A'],
@@ -96,7 +103,7 @@ def runGame():
 					DISPLAYSURF.fill(BGCOLOR)
 					pygame.mixer.music.stop()
 					showTextScreen('Paused') #until a key is pressed
-					pygame.mixer.music.play(-1 0.0)
+					pygame.mixer.music.play(-1, 0.0)
 					lastFallTime = time.time()
 					lastMoveDownTime = time.time()
 					lastMoveSidewaysTime = time.time()
@@ -110,14 +117,13 @@ def runGame():
 			elif event.type == KEYDOWN:
 				# moving block sideways
 				if (event.key == K_LEFT or event.key == K_a) and \
-				 isValidPosition(board, fallingPiece, adjX=-1):
+					isValidPosition(board, fallingPiece, adjX=-1):
 				 	fallingPiece['x'] -= 1
 				 	movingLeft = True
 				 	movingRight = False
 				 	lastMoveSidewaysTime = time.time()
 
-				 elif (event.key == K_RIGHT or event.key == K_d) and \
-				 isValidPosition(board, fallingPiece, adjX=1):
+				elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
 				 	fallingPiece['x'] += 1
 				 	movingRight = True
 				 	movingLeft = True
@@ -227,39 +233,72 @@ def checkForQuit():
 def calculateLevelAndFallFreq(score):
 	level = int(score / 10) + 1
 	fallFreq = 0.27 - (level * 0.02)
-	return level.fallFreq
+	return level, fallFreq
 
 def getNewPiece():
 	# return a new pill with random colors
-	newPiece = {'A': random.randit(0, len(COLORS)-1),
-				'B': random.randit(0, len(COLORS)-1),
+	newPiece = {'A': random.randint(0, len(COLORS)-1),
+				'B': random.randint(0, len(COLORS)-1),
 				'rotation': 0,
 				'x': int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2),
 				'y': 0}
+	return newPiece
 
 
 def addToBoard(board, piece):
 	# fill in the board based on piece's location
+	for x in range(TEMPLATEWIDTH):
+		for y in range(TEMPLATEHEIGHT):
+			if ORIENTATION[piece['rotation']][y][x] != BLANK:
+				# this needs to be fixed
+				board[x + piece['x']][y + piece['y']] = piece['A']
 
-def getBlankBoard():
+def getInitialBoard():
+	board = []
+	for i in range(BOARDWIDTH):
+		board.append([BLANK] * BOARDHEIGHT)
+	return board
 
 def isOnBoard(x, y):
+	return x >= 0 and x < BOARDWIDTH and y < BOARDHEIGHT
 
 def isValidPosition(board, piece, adjX=0, adjY=0):
+	# returns true if piece is in board and doesn't collide with anything
+	for x in range(TEMPLATEWIDTH):
+		for y in range(TEMPLATEHEIGHT):
+			isAboveBoard = y + piece['y'] + adjY < 0
+			if isAboveBoard or ORIENTATION[piece['rotation']][y][x] == BLANK:
+				continue
+			if not isOnBoard(x + piece['x'] + adjX, y + piece['y'] + adjY):
+				return False
+			if board[x + piece['x'] + adjX][y + piece['y'] + adjY] != BLANK:
+				return False
+	return True
 
 def isCompleteSet(board, fallingPiece):
+	if falling
 
-def removeCompleteSet(board):
+def removeCompletes(board):
+	return 1
 
 def convertToPixelCoords(boxx, boxy):
+	pass
 
 def drawBox(boxx, boxy, color, pixelx=None, pixely=None):
+	pass
+
+def drawBoard(board):
+	# draw the border around the board
+	pass
 
 def drawStatus(score, level):
+	pass
 
 def drawPiece(piece, pixelx=None, pixely=None):
+	pass
 
 def drawNextPiece(piece):
+	pass
 
 if __name__ == '__main__':
 	main()
