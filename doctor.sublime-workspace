@@ -1,0 +1,485 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"TEM",
+				"TEMPLATEWIDTH"
+			],
+			[
+				"BOR",
+				"BOARDWIDTH"
+			],
+			[
+				"pressKey",
+				"pressKeyRect"
+			],
+			[
+				"pressK",
+				"pressKeySurf"
+			],
+			[
+				"title",
+				"titleSurf"
+			],
+			[
+				"WINDOW",
+				"WINDOWWIDTH"
+			],
+			[
+				"last",
+				"lastFallTime"
+			],
+			[
+				"FAL",
+				"fallFreq"
+			],
+			[
+				"adj",
+				"adjY"
+			],
+			[
+				"lastMo",
+				"lastMoveDownTime"
+			],
+			[
+				"lastMove",
+				"lastMoveDownTime"
+			],
+			[
+				"falling",
+				"fallingPiece"
+			],
+			[
+				"BO",
+				"BOARDWIDTH"
+			],
+			[
+				"FO",
+				"FOOL_API_KEY"
+			],
+			[
+				"Mi",
+				"MIXPANEL_TOKEN"
+			],
+			[
+				"MIX",
+				"MIXPANEL_SECRET"
+			],
+			[
+				"MIXPAN",
+				"MIXPANEL_KEY"
+			],
+			[
+				"Qua",
+				"QuarterlyReturnDataPoint"
+			],
+			[
+				"benchmark_",
+				"benchmark_symbol"
+			],
+			[
+				"or",
+				"order_by"
+			],
+			[
+				"deci",
+				"decimal_places"
+			],
+			[
+				"benchmar",
+				"benchmark_link"
+			],
+			[
+				"tick",
+				"ticker_link"
+			],
+			[
+				"access",
+				"access_code"
+			],
+			[
+				"Dat",
+				"DateTimeField"
+			],
+			[
+				"dirty_d",
+				"dirty_date_a"
+			],
+			[
+				"site",
+				"site_decorator"
+			],
+			[
+				"MED",
+				"MEDIA_URL"
+			],
+			[
+				"MEDIA",
+				"MEDIA_ROOT"
+			],
+			[
+				"is",
+				"is_staff"
+			],
+			[
+				"end",
+				"end_time"
+			],
+			[
+				"Event",
+				"EventFactory"
+			],
+			[
+				"mem_",
+				"mem_labels"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "doctor.py",
+			"settings":
+			{
+				"buffer_size": 7612,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 309.0,
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"install pack	",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: Add Repository",
+				"Package Control: Add Repository"
+			]
+		],
+		"width": 435.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/wise/Development/makinggames/fonttext.py",
+		"/home/wise/Development/makinggames/catanimation.py",
+		"/home/wise/Development/makinggames/drawing.py",
+		"/home/wise/Development/makinggames/blankpygame.py",
+		"/home/wise/Development/foolfunds/funds/urls.py",
+		"/home/wise/Development/foolfunds/content/models.py",
+		"/home/wise/Development/foolfunds/foolfunds/settings/base.py",
+		"/home/wise/Development/foolfunds/templates/default/search/search.html",
+		"/home/wise/Development/foolfunds/funds/helpers.py",
+		"/home/wise/Development/foolfunds/content/views.py",
+		"/home/wise/Development/foolfunds/funds/views.py",
+		"/home/wise/Development/foolfunds/templates/default/funds/overview.html",
+		"/home/wise/Development/foolfunds/templates/default/funds/performance.html",
+		"/home/wise/Development/foolfunds/content/search_indexes.py",
+		"/home/wise/Development/foolfunds/templates/default/search/indexes/content/event_text.txt",
+		"/home/wise/Development/foolfunds/templates/default/search/indexes/funds/fund_text.txt",
+		"/home/wise/Development/foolfunds/funds/models.py",
+		"/home/wise/Development/foolfunds/templates/default/funds/charts/morningstar_charts.html",
+		"/home/wise/Development/foolfunds/get-morningstar-data.py",
+		"/home/wise/Development/foolfunds/core/helpers.py",
+		"/home/wise/Development/foolfunds/templates/default/content/commentary_list.html",
+		"/home/wise/Development/foolfunds/circle.yml",
+		"/home/wise/Development/foolfunds/templates/funds/process_and_people.html",
+		"/home/wise/Development/foolfunds/templates/default/content/news.html",
+		"/home/wise/Development/foolfunds/templates/default/content/commentary_list_camilli.html",
+		"/home/wise/Development/foolfunds/templates/default/content/news_list.html",
+		"/home/wise/Development/foolfunds/content/tests/test_models.py",
+		"/home/wise/Development/foolfunds/templates/funds/performance.html",
+		"/home/wise/Development/foolfunds/templates/funds/overview-test.html",
+		"/home/wise/Development/foolfunds/templates/funds/people.html",
+		"/home/wise/Development/foolfunds/templates/funds/content_with_sidebar.html",
+		"/home/wise/Development/foolfunds/core/factories.py",
+		"/home/wise/Development/foolfunds/templates/funds/content_with_sidebar-test.html",
+		"/home/wise/Development/foolfunds/templates/content/forms_and_lit.html",
+		"/home/wise/Development/foolfunds/templates/content/event_list.html",
+		"/home/wise/Development/foolfunds/templates/content/event.html",
+		"/home/wise/Development/foolfunds/core/tests/test_views.py",
+		"/home/wise/Development/foolfunds/templates/content/commentary.html",
+		"/home/wise/Development/foolfunds/core/fixtures/test.json",
+		"/home/wise/Development/foolfunds/foolfunds/settings/local.py",
+		"/home/wise/Development/foolfunds/core/models.py",
+		"/home/wise/Development/foolfunds/templates/default/funds/holdings.html",
+		"/home/wise/Development/foolfunds/templates/default/content/commentary.html",
+		"/home/wise/Development/foolfunds/templates/default/funds/process_and_people.html",
+		"/home/wise/Development/foolfunds/foolfunds/settings/production.py",
+		"/home/wise/Development/foolfunds/core/fixtures/users-advisors.json",
+		"/home/wise/Development/foolfunds/content/admin.py",
+		"/home/wise/Development/foolfunds/templates/default/content/commentary_list_basic.html",
+		"/home/wise/Development/foolfunds/templates/content/index.html",
+		"/home/wise/Development/foolfunds/templates/base.html",
+		"/home/wise/Development/foolfunds/templates/funds/processes.html",
+		"/home/wise/Development/foolfunds/funds/templatetags/zero_na.py",
+		"/home/wise/Development/foolfunds/templates/default/base.html",
+		"/home/wise/Development/foolfunds/funds/templatetags/__init__.py",
+		"/home/wise/Development/foolfunds/core/media/test.txt",
+		"/home/wise/Development/foolfunds/content/factories.py",
+		"/home/wise/Development/foolfunds/templates/retail/base.html",
+		"/home/wise/Development/foolfunds/content/urls.py",
+		"/home/wise/Development/foolfunds/templates/default/content/news_list_basic.html",
+		"/home/wise/Development/foolfunds/templates/default/funds/charts/test_chart.html",
+		"/home/wise/Development/foolfunds/core/views.py",
+		"/home/wise/Development/foolfunds/templates/default/content/insight_list.html",
+		"/home/wise/Development/piracy/piracy_scrape/piracy_scrape/spiders/test.py",
+		"/home/wise/Development/piracy/piracy_scrape/piracy_scrape/items.py",
+		"/home/wise/Development/foolfunds/foolfunds/settings/local_template.py",
+		"/home/wise/Development/foolfunds/core/fixtures/test/test-prettier.json",
+		"/home/wise/Development/foolfunds/core/fixtures/test-pretty.json",
+		"/home/wise/Development/foolfunds/funds/admin.py",
+		"/home/wise/Development/foolfunds/templates/default/content/why_fool_funds.html",
+		"/home/wise/Development/foolfunds/templates/search/indexes/funds/fund_text.txt",
+		"/home/wise/Development/foolfunds/advisors/tests/test_models.py",
+		"/home/wise/Development/foolfunds/advisors/tests/test_views.py",
+		"/home/wise/Development/foolfunds/templates/search/search.html",
+		"/home/wise/Development/foolfunds/templates/search/indexes/advisors/event_text.txt",
+		"/home/wise/Development/foolfunds/funds/search_indexes.py",
+		"/home/wise/Development/foolfunds/foolfunds/urls.py",
+		"/home/wise/Development/foolfunds/templates/search/indexes/advisors/note_text.txt",
+		"/home/wise/Development/foolfunds/advisors/factories.py",
+		"/home/wise/Development/foolfunds/core/custom_storages.py",
+		"/home/wise/Development/foolfunds/advisors/search_indexes.py",
+		"/home/wise/Development/foolfunds/advisors/views.py",
+		"/home/wise/Development/foolfunds/advisors/models.py",
+		"/home/wise/Development/foolfunds/advisors/helpers.py",
+		"/home/wise/Development/foolfunds/templates/advisors/event_list.html",
+		"/home/wise/Development/foolfunds/templates/advisors/event.html",
+		"/home/wise/Development/foolfunds/funds/tests/test_views.py",
+		"/home/wise/Development/foolfunds/core/storages.py",
+		"/home/wise/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+		"/home/wise/Development/foolfunds/requirements/_base.txt",
+		"/home/wise/Development/foolfunds/templates/funds/charts/fulcrum_fee.html",
+		"/home/wise/Development/foolfunds/core/widgets.py",
+		"/home/wise/Development/foolfunds/advisors/urls.py",
+		"/home/wise/Development/foolfunds/templates/funds/charts/top11_chart-lite.html",
+		"/home/wise/Development/foolfunds/advisors/admin.py",
+		"/home/wise/Development/foolfunds/core/fields.py",
+		"/home/wise/Development/foolfunds/templates/funds/top_holdings.html",
+		"/home/wise/Development/foolfunds/core/forms.py",
+		"/home/wise/.config/sublime-text-2/Packages/User/Python.sublime-settings",
+		"/home/wise/Development/foolfunds/templates/404.html",
+		"/home/wise/Development/excello2/hackathon/excello/settings.py",
+		"/home/wise/Development/excello2/hackathon/testfile.py",
+		"/home/wise/Development/new-wrappers/wrappertest.py",
+		"/home/wise/Development/excello2/hackathon/templates/index.html",
+		"/home/wise/Development/excello2/hackathon/dashboard/views.py",
+		"/home/wise/Development/excello2/hackathon/s3storages.py",
+		"/home/wise/Development/excello2/hackathon/Procfile"
+	],
+	"find":
+	{
+		"height": 47.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"getnewpiece",
+			"commentary articles",
+			"access_code",
+			"reverse(",
+			"ticker_link",
+			"foolx",
+			"include",
+			"admin",
+			"alertify.core.css",
+			"href=\"css",
+			"/static/",
+			"{{ static }}",
+			"impact-2013",
+			"indyfund_1",
+			"sites",
+			"billman_1",
+			"media_url",
+			"\"confirmed\": false",
+			"\"confirmed\": true",
+			"advisors.advisor",
+			"featured",
+			"title",
+			"register today as a",
+			"impact",
+			"barker",
+			"tag",
+			"richtext",
+			"media",
+			"NewsFactory",
+			"insight",
+			"media_list",
+			"distributioninline",
+			"distribution",
+			"why fool funds",
+			"bill bark",
+			"is_staff",
+			"default",
+			"nother-event",
+			"000",
+			"ffe",
+			"excello2"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"settings.MSTAR_API_KEY",
+			"fund_link",
+			"\"status\": 1",
+			"\"status\": 2",
+			"core.advisor"
+		],
+		"reverse": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "doctor.py",
+					"settings":
+					{
+						"buffer_size": 7612,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7204,
+								7204
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2795.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 36.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 66.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"fulc",
+				"templates/funds/charts/fulcrum_fee.html"
+			],
+			[
+				"holdings",
+				"templates/funds/top_holdings.html"
+			],
+			[
+				"fundmode",
+				"funds/models.py"
+			],
+			[
+				"base.ht",
+				"templates/base.html"
+			],
+			[
+				"view",
+				"core/views.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 153.0,
+	"status_bar_visible": true
+}
