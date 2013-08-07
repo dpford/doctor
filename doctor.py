@@ -276,7 +276,7 @@ def isValidPosition(board, piece, adjX=0, adjY=0):
 	return True
 
 def isCompleteSet(board, fallingPiece):
-	if falling
+	pass
 
 def removeCompletes(board):
 	return 1
@@ -289,16 +289,42 @@ def drawBox(boxx, boxy, color, pixelx=None, pixely=None):
 
 def drawBoard(board):
 	# draw the border around the board
-	pass
+	pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (XMARGIN - 3, TOPMARGIN - 7, 
+		(BOARDWIDTH * BOXSIZE) + 8, (BOARDHEIGHT * BOXSIZE) + 8), 5)
+
+	#fill the background of the board
+	pygame.draw.rect(DISPLAYSURF, BGCOLOR, (XMARGIN, TOPMARGIN, 
+		BOXSIZE * BOARDWIDTH, BOXSIZE * BOARDHEIGHT))
+
+	#draw the individual boxes on the board
+	for x in range(BOARDWIDTH):
+		for y in range(BOARDHEIGHT):
+			drawBox(x, y, board[x][y])
 
 def drawStatus(score, level):
-	pass
+	#draw the score text
+	scoreSurf = BASICFONT.render('Score: %s' % score, True, TEXTCOLOR)
+	scoreRect = scoreSurf.get_rect()
+	scoreRect.topleft = (WINDOWWIDTH - 150, 20)
+	DISPLAYSURF.blit(scoreSurf, scoreRect)
+
+	#draw the level text
+	levelSurf = BASICFONT.render('Level: %s' % level, True, TEXTCOLOR)
+	levelRect = levelSurf.get_rect()
+	levelRect.topleft = (WINDOWWIDTH - 150, 50)
+	DISPLAYSURF.blit(levelSurf, levelRect)
 
 def drawPiece(piece, pixelx=None, pixely=None):
 	pass
 
 def drawNextPiece(piece):
-	pass
+	# draw the next text
+	nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR)
+	nextRect = nextSurf.get_rect()
+	nextRect.topleft = (WINDOWWIDTH - 120, 80)
+	DISPLAYSURF.blit(nextSurf, nextRect)
+	#draw the next piece
+	drawPiece(piece, pixelx=WINDOWWIDTH-120, pixely=100)
 
 if __name__ == '__main__':
 	main()
