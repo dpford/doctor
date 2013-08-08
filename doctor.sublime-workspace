@@ -5,15 +5,19 @@
 		[
 			[
 				"BOARD",
-				"BOARDHEIGHT"
+				"BOARDWIDTH"
+			],
+			[
+				"BO",
+				"BOARDWIDTH"
+			],
+			[
+				"BOR",
+				"BORDERCOLOR"
 			],
 			[
 				"TEM",
 				"TEMPLATEWIDTH"
-			],
-			[
-				"BOR",
-				"BOARDWIDTH"
 			],
 			[
 				"pressKey",
@@ -54,10 +58,6 @@
 			[
 				"falling",
 				"fallingPiece"
-			],
-			[
-				"BO",
-				"BOARDWIDTH"
 			],
 			[
 				"FO",
@@ -147,7 +147,7 @@
 			"file": "doctor.py",
 			"settings":
 			{
-				"buffer_size": 8681,
+				"buffer_size": 9758,
 				"line_ending": "Unix"
 			}
 		}
@@ -383,15 +383,15 @@
 					"file": "doctor.py",
 					"settings":
 					{
-						"buffer_size": 8681,
+						"buffer_size": 9758,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7564,
-								7564
+								8508,
+								8508
 							]
 						],
 						"settings":
@@ -400,7 +400,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3133.0,
+						"translation.y": 3683.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
