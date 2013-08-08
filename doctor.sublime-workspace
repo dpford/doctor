@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"TEMP",
+				"TEMPLATEHEIGHT"
+			],
+			[
 				"BOARD",
 				"BOARDWIDTH"
 			],
@@ -147,7 +151,7 @@
 			"file": "doctor.py",
 			"settings":
 			{
-				"buffer_size": 9758,
+				"buffer_size": 11055,
 				"line_ending": "Unix"
 			}
 		}
@@ -383,15 +387,15 @@
 					"file": "doctor.py",
 					"settings":
 					{
-						"buffer_size": 9758,
+						"buffer_size": 11055,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8508,
-								8508
+								7424,
+								7424
 							]
 						],
 						"settings":
@@ -400,7 +404,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3683.0,
+						"translation.y": 3078.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

@@ -249,9 +249,11 @@ def addToBoard(board, piece):
 	# fill in the board based on piece's location
 	for x in range(TEMPLATEWIDTH):
 		for y in range(TEMPLATEHEIGHT):
-			if ORIENTATION[piece['rotation']][y][x] != BLANK:
+			if ORIENTATION[piece['rotation']][y][x] == 'A':
 				# this needs to be fixed
 				board[x + piece['x']][y + piece['y']] = piece['A']
+			elif ORIENTATION[piece['rotation']][y][x] == 'B':
+				board[x + piece['x']][y + piece['y']] = piece['B']
 
 def getInitialBoard():
 	board = []
@@ -282,10 +284,21 @@ def removeCompletes(board):
 	return 1
 
 def convertToPixelCoords(boxx, boxy):
-	pass
+	# convert the given xy coordinates of the board to xy 
+	#coords of the location on screen
+	return (XMARGIN + (boxx * BOXSIZE)), (TOPMARGIN + (boxy * BOXSIZE))
 
 def drawBox(boxx, boxy, color, pixelx=None, pixely=None):
-	pass
+	#draw a single box at xy coordinates at the board. or if pixelx/pixely 
+	#specified, draw to the pixel coords stored there (for next piece)
+	if color == BLANK:
+		return
+	if pixelx == None and pixely == None:
+		pixelx, pixely = convertToPixelCoords(boxx, boxy)
+	pygame.draw.rect(DISPLAYSURF, COLORS[color], (pixelx + 1, pixely +1, 
+					BOXSIZE - 1, BOXSIZE - 1))
+	pygame.draw.rect(DISPLAYSURF, LIGHTCOLORS[color], (pixelx + 1, pixely + 1, 
+					BOXSIZE - 4, BOXSIZE - 4))
 
 def drawBoard(board):
 	# draw the border around the board
@@ -315,7 +328,20 @@ def drawStatus(score, level):
 	DISPLAYSURF.blit(levelSurf, levelRect)
 
 def drawPiece(piece, pixelx=None, pixely=None):
-	pass
+	shapeToDraw = ORIENTATION[0]
+	if pixelx == None and pixely == None:
+		#if pixelx and y hasn't bee specified, use location 
+		#stored in piece data structure
+		pixelx, pixely = convertToPixelCoords(piece['x'], piece['y'])
+	#draw each block that make up the pill
+	for x in range(TEMPLATEWIDTH):
+		for y in range(TEMPLATEHEIGHT):
+			if shapeToDraw[y][x] == 'A':
+				drawBox(None, None, piece['A'], pixelx + (x * BOXSIZE), 
+						pixely + (y * BOXSIZE))
+			elif shapeToDraw[y][x] == 'B':
+				drawBox(None, None, piece['B'], pixelx + (x * BOXSIZE), 
+						pixely + (y * BOXSIZE))
 
 def drawNextPiece(piece):
 	# draw the next text
