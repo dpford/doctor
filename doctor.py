@@ -46,12 +46,12 @@ BLANK = '.'
 
 ORIENTATION = [	  ['..',
 				   'AB'],
-				  ['.B',
-				   '.A'],
+				  ['B.',
+				   'A.'],
 				  ['..',
 				   'BA'],
-				  ['.A',
-				   '.B']]
+				  ['A.',
+				   'B.']]
 
 def main():
 	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT
@@ -126,7 +126,7 @@ def runGame():
 				elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
 				 	fallingPiece['x'] += 1
 				 	movingRight = True
-				 	movingLeft = True
+				 	movingLeft = False
 				 	lastMoveSidewaysTime = time.time()
 
 				 #rotating the pill (if there's room)
@@ -328,7 +328,7 @@ def drawStatus(score, level):
 	DISPLAYSURF.blit(levelSurf, levelRect)
 
 def drawPiece(piece, pixelx=None, pixely=None):
-	shapeToDraw = ORIENTATION[0]
+	shapeToDraw = ORIENTATION[piece['rotation']]
 	if pixelx == None and pixely == None:
 		#if pixelx and y hasn't bee specified, use location 
 		#stored in piece data structure
