@@ -151,7 +151,7 @@
 			"file": "doctor.py",
 			"settings":
 			{
-				"buffer_size": 11055,
+				"buffer_size": 11072,
 				"line_ending": "Unix"
 			}
 		},
@@ -323,6 +323,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"fallingPiece",
 			"getnewpiece",
 			"commentary articles",
 			"access_code",
@@ -394,15 +395,15 @@
 					"file": "doctor.py",
 					"settings":
 					{
-						"buffer_size": 11055,
+						"buffer_size": 11072,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7424,
-								7424
+								1047,
+								1047
 							]
 						],
 						"settings":
@@ -411,7 +412,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3078.0,
+						"translation.y": 303.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
