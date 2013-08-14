@@ -151,14 +151,7 @@
 			"file": "doctor.py",
 			"settings":
 			{
-				"buffer_size": 11072,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"settings":
-			{
-				"buffer_size": 0,
+				"buffer_size": 12062,
 				"line_ending": "Unix"
 			}
 		}
@@ -395,15 +388,15 @@
 					"file": "doctor.py",
 					"settings":
 					{
-						"buffer_size": 11072,
+						"buffer_size": 12062,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1047,
-								1047
+								8569,
+								8569
 							]
 						],
 						"settings":
@@ -412,32 +405,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 303.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"settings":
-					{
-						"buffer_size": 0,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 3540.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

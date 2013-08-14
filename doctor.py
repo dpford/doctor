@@ -279,9 +279,16 @@ def isValidPosition(board, piece, adjX=0, adjY=0):
 
 def isCompleteSetY(board, y):
 	count = 0
+	last_color = -1
 	for x in range(BOARDWIDTH):
 		if board[x][y] != BLANK:
-			count += 1
+			this_color = board[x][y]
+			if (this_color == last_color) or (last_color == -1):
+				last_color = this_color
+				count += 1
+			else:
+				last_color = this_color
+				count = 0
 			if count == 4:
 				return x
 		else:
@@ -290,9 +297,16 @@ def isCompleteSetY(board, y):
 
 def isCompleteSetX(board, x):
 	count = 0
+	last_color = -1
 	for y in range(BOARDHEIGHT):
 		if board[x][y] != BLANK:
-			count += 1
+			this_color = board[x][y]
+			if (this_color == last_color) or (last_color == -1):
+				last_color = this_color
+				count += 1
+			else:
+				last_color = this_color
+				count = 0
 			if count == 4:
 				return y
 		else:
