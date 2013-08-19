@@ -151,7 +151,7 @@
 			"file": "doctor.py",
 			"settings":
 			{
-				"buffer_size": 12062,
+				"buffer_size": 12424,
 				"line_ending": "Unix"
 			}
 		}
@@ -316,6 +316,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"drawpiece",
+			"nextpiece",
+			"getnewpiece",
+			"lightcolors",
 			"fallingPiece",
 			"getnewpiece",
 			"commentary articles",
@@ -388,15 +392,15 @@
 					"file": "doctor.py",
 					"settings":
 					{
-						"buffer_size": 12062,
+						"buffer_size": 12424,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8569,
-								8569
+								8587,
+								8587
 							]
 						],
 						"settings":
@@ -405,7 +409,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3540.0,
+						"translation.y": 3553.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

@@ -277,7 +277,7 @@ def isValidPosition(board, piece, adjX=0, adjY=0):
 				return False
 	return True
 
-def isCompleteSetY(board, y):
+def isCompleteSetHoriz(board, y):
 	count = 0
 	last_color = -1
 	for x in range(BOARDWIDTH):
@@ -290,12 +290,15 @@ def isCompleteSetY(board, y):
 				last_color = this_color
 				count = 0
 			if count == 4:
-				return x
+				return x, 4
 		else:
-			count = 0
+			if count >= 4:
+				return x, count
+			else:
+				count = 0
 	return False
 
-def isCompleteSetX(board, x):
+def isCompleteSetVert(board, x):
 	count = 0
 	last_color = -1
 	for y in range(BOARDHEIGHT):
@@ -305,39 +308,54 @@ def isCompleteSetX(board, x):
 				last_color = this_color
 				count += 1
 			else:
-				last_color = this_color
-				count = 0
-			if count == 4:
-				return y
+				if count >= 4:
+					print "first"
+					return y, count
+				else:
+					last_color = this_color
+					count = 1
 		else:
-			count = 0
+			if count >= 4:
+				print "second", count
+				return y, count
+			else:
+				count = 0
+		if y == (BOARDHEIGHT - 1):
+			if count >= 4:
+				return y, count
+	if count >= 4:
+		print "fucked up, x is ", x
 	return False
 
-def shiftRemainingY(board, x, y):
+def shiftRemainingYHoriz(board, x, count, y):
 	for pullDownY in range(y, 0, -1):
-		for x_1 in range(x, x-4, -1):
+		for x_1 in range(x, x-count, -1):
 			board[x_1][pullDownY] = board[x_1][pullDownY-1]
 
-def shiftRemainingX(board, x, y):
-	for pullDownY in range(y, 4, -1):
-		board[x][pullDownY] = board[x][pullDownY-4]
+def shiftRemainingXVert(board, x, y, count):
+	print "y is " + str(y)
+	for pullDownY in range(y, count, -1):
+		print pullDownY
+		board[x][pullDownY] = board[x][pullDownY-count]
 
 
 
 def removeCompletes(board):
 	y = BOARDHEIGHT - 1 #start at bottom of board
 	while y >= 0:
-		setLocation = isCompleteSetY(board, y)
+		setLocation = isCompleteSetHoriz(board, y)
 		if setLocation:
-			shiftRemainingY(board, setLocation, y)
+			print "horiz"
+			shiftRemainingYHoriz(board, setLocation[0], setLocation[1], y)
 			print 'complete line y, y is %s, setLocation is %s' % (y, setLocation)
 		else:
 			y -= 1
 	x = BOARDWIDTH - 1
 	while x >= 0:
-		setLocation = isCompleteSetX(board, x)
+		setLocation = isCompleteSetVert(board, x)
 		if setLocation:
-			shiftRemainingX(board, x, setLocation)
+			print "vert"
+			shiftRemainingXVert(board, x, setLocation[0], setLocation[1])
 		else:
 			x -= 1
 	return 1
