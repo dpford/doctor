@@ -287,15 +287,19 @@ def isCompleteSetHoriz(board, y):
 				last_color = this_color
 				count += 1
 			else:
-				last_color = this_color
-				count = 0
-			if count == 4:
-				return x, 4
+				if count >= 4:
+					return x-1, count
+				else:
+					last_color = this_color
+					count = 1
 		else:
 			if count >= 4:
 				return x, count
 			else:
 				count = 0
+		if x == (BOARDWIDTH - 1):
+			if count >= 4:
+				return x, count
 	return False
 
 def isCompleteSetVert(board, x):
@@ -309,15 +313,13 @@ def isCompleteSetVert(board, x):
 				count += 1
 			else:
 				if count >= 4:
-					print "first"
-					return y, count
+					return y-1, count
 				else:
 					last_color = this_color
 					count = 1
 		else:
 			if count >= 4:
-				print "second", count
-				return y, count
+				return y-1, count
 			else:
 				count = 0
 		if y == (BOARDHEIGHT - 1):
@@ -328,6 +330,9 @@ def isCompleteSetVert(board, x):
 	return False
 
 def shiftRemainingYHoriz(board, x, count, y):
+	print "x is " + str(x)
+	print "y is " + str(y)
+	print "count is " + str(count)
 	for pullDownY in range(y, 0, -1):
 		for x_1 in range(x, x-count, -1):
 			board[x_1][pullDownY] = board[x_1][pullDownY-1]
@@ -335,7 +340,6 @@ def shiftRemainingYHoriz(board, x, count, y):
 def shiftRemainingXVert(board, x, y, count):
 	print "y is " + str(y)
 	for pullDownY in range(y, count, -1):
-		print pullDownY
 		board[x][pullDownY] = board[x][pullDownY-count]
 
 
