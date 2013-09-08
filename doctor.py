@@ -6,6 +6,7 @@ import random
 import time
 import pygame
 import sys
+import math
 
 from pygame.locals import *
 
@@ -294,7 +295,7 @@ def isCompleteSetHoriz(board, y):
 					count = 1
 		else:
 			if count >= 4:
-				return x, count
+				return x-1, count
 			else:
 				count = 0
 		if x == (BOARDWIDTH - 1):
@@ -376,10 +377,25 @@ def drawBox(boxx, boxy, color, pixelx=None, pixely=None):
 		return
 	if pixelx == None and pixely == None:
 		pixelx, pixely = convertToPixelCoords(boxx, boxy)
-	pygame.draw.rect(DISPLAYSURF, COLORS[color], (pixelx + 1, pixely +1, 
-					BOXSIZE - 1, BOXSIZE - 1))
-	pygame.draw.rect(DISPLAYSURF, LIGHTCOLORS[color], (pixelx + 1, pixely + 1, 
-					BOXSIZE - 4, BOXSIZE - 4))
+	# pygame.draw.rect(DISPLAYSURF, COLORS[color], (pixelx + 1, pixely +1, 
+	# 				BOXSIZE - 1, BOXSIZE - 1))
+	# pygame.draw.rect(DISPLAYSURF, LIGHTCOLORS[color], (pixelx + 1, pixely + 1, 
+	# 				BOXSIZE - 4, BOXSIZE - 4))
+	# pygame.draw.arc(DISPLAYSURF, 
+	# 			COLORS[color], 
+	# 			(pixelx + 1, pixely +1, BOXSIZE - 1, BOXSIZE - 1),
+	# 			math.radians(90),
+	# 			math.radians(270),
+	# 			3)
+	pygame.draw.circle(DISPLAYSURF, 
+				COLORS[color], 
+				(pixelx + (BOXSIZE/2), pixely + (BOXSIZE/2)),
+				10)
+	# pygame.draw.arc(DISPLAYSURF, 
+	# 			COLORS[color], 
+	# 			(pixelx + 1, pixely +1, BOXSIZE - 4, BOXSIZE - 4),
+	# 			30,
+	# 			120)
 
 def drawBoard(board):
 	# draw the border around the board

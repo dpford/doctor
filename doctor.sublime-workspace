@@ -151,7 +151,15 @@
 			"file": "doctor.py",
 			"settings":
 			{
-				"buffer_size": 12424,
+				"buffer_size": 12873,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "def isCompleteSetX(board, x):\n	count = 0\n	last_color = -1\n	for y in range(BOARDHEIGHT):\n		if board[x][y] != BLANK:\n			this_color = board[x][y]\n			if (this_color == last_color) or (last_color == -1):\n				last_color = this_color\n				count += 1\n			else:\n				if count >= 4:\n					return y, count\n				else:\n					last_color = this_color\n					count = 0\n		else:\n			if count >= 4:\n				return y, count\n			else:\n				count = 0\n	return False",
+			"settings":
+			{
+				"buffer_size": 427,
 				"line_ending": "Unix"
 			}
 		}
@@ -316,6 +324,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"boardheight",
+			"iscomplete",
 			"drawpiece",
 			"nextpiece",
 			"getnewpiece",
@@ -364,7 +374,7 @@
 			"excello2"
 		],
 		"highlight": true,
-		"in_selection": false,
+		"in_selection": true,
 		"preserve_case": false,
 		"regex": false,
 		"replace_history":
@@ -392,15 +402,15 @@
 					"file": "doctor.py",
 					"settings":
 					{
-						"buffer_size": 12424,
+						"buffer_size": 12873,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8587,
-								8587
+								9603,
+								9603
 							]
 						],
 						"settings":
@@ -409,7 +419,33 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3553.0,
+						"translation.y": 3725.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"settings":
+					{
+						"buffer_size": 427,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								427,
+								427
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
