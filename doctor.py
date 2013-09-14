@@ -65,13 +65,13 @@ def main():
 
 	showTextScreen('Dr. Mario')
 	while True: #game loop
-		pygame.mixer.music.load('doctor_music/03_-_Dr._Mario_-_NES_-_Fever.ogg')
+		pygame.mixer.music.load('doctor_music/doctor_fever_guitar.ogg')
 		pygame.mixer.music.play(-1, 0.0)
 		runGame()
 		pygame.mixer.music.stop()
 		showTextScreen('Game Over')
 		pygame.mixer.music.load('doctor_music/08_-_Dr._Mario_-_NES_-_VS_Game_Over.ogg')
-		pygame.mixer.music.play(3, 0.0)
+		pygame.mixer.music.play(-1, 0.0)
 
 def runGame():
 	board = getInitialBoard()
@@ -252,13 +252,32 @@ def getNewPiece():
 
 def addToBoard(board, piece):
 	# fill in the board based on piece's location
+	print piece
 	for x in range(TEMPLATEWIDTH):
 		for y in range(TEMPLATEHEIGHT):
 			if ORIENTATION[piece['rotation']][y][x] == 'A':
 				# this needs to be fixed
-				board[x + piece['x']][y + piece['y']] = piece['A']
+				if piece['rotation'] == 0:
+					put_on_board = piece['A'] + 6
+				elif piece['rotation'] == 1:
+					put_on_board = piece['A'] + 9
+				elif piece['rotation'] == 2:
+					put_on_board = piece['A']
+				elif piece['rotation'] == 3:
+					put_on_board = piece['A'] + 3
+				board[x + piece['x']][y + piece['y']] = put_on_board
+				print piece['A']
 			elif ORIENTATION[piece['rotation']][y][x] == 'B':
-				board[x + piece['x']][y + piece['y']] = piece['B']
+				if piece['rotation'] == 0:
+					put_on_board = piece['B']
+				elif piece['rotation'] == 1:
+					put_on_board = piece['B'] + 3
+				elif piece['rotation'] == 2:
+					put_on_board = piece['B'] + 6
+				elif piece['rotation'] == 3:
+					put_on_board = piece['B'] + 9
+				print "put on board B is " + str(put_on_board)
+				board[x + piece['x']][y + piece['y']] = put_on_board
 
 def getInitialBoard():
 	board = []
@@ -287,7 +306,7 @@ def isCompleteSetHoriz(board, y):
 	last_color = -1
 	for x in range(BOARDWIDTH):
 		if board[x][y] != BLANK:
-			this_color = board[x][y]
+			this_color = board[x][y] % 3
 			if (this_color == last_color) or (last_color == -1):
 				last_color = this_color
 				count += 1
@@ -312,7 +331,7 @@ def isCompleteSetVert(board, x):
 	last_color = -1
 	for y in range(BOARDHEIGHT):
 		if board[x][y] != BLANK:
-			this_color = board[x][y]
+			this_color = board[x][y] % 3
 			if (this_color == last_color) or (last_color == -1):
 				last_color = this_color
 				count += 1
@@ -398,7 +417,7 @@ def convertToPixelCoords(boxx, boxy):
 	#coords of the location on screen
 	return (XMARGIN + (boxx * BOXSIZE)), (TOPMARGIN + (boxy * BOXSIZE))
 
-def drawBox(boxx, boxy, color, pixelx=None, pixely=None):
+def drawBox(boxx, boxy, color, rotation, pill_half, pixelx=None, pixely=None):
 	#draw a single box at xy coordinates at the board. or if pixelx/pixely 
 	#specified, draw to the pixel coords stored there (for next piece)
 	if color == BLANK:
@@ -415,29 +434,86 @@ def drawBox(boxx, boxy, color, pixelx=None, pixely=None):
 	# 			math.radians(90),
 	# 			math.radians(270),
 	# 			3)
-	pygame.draw.circle(DISPLAYSURF, 
-				COLORS[color], 
-				(pixelx + (BOXSIZE/2), pixely + (BOXSIZE/2)),
-				10)
+	# pygame.draw.circle(DISPLAYSURF, 
+	# 			COLORS[color], 
+	# 			(pixelx + (BOXSIZE/2), pixely + (BOXSIZE/2)),
+	# 			10)
+	pill_right = pygame.image.load('%s.png' % (color,))
+	pillrect = (pixelx + 1, pixely +1, BOXSIZE, BOXSIZE)
+	if rotation == 0:
+		if pill_half == 'A':
+			pill_left = pygame.transform.rotate(pill_right, 180)
+			DISPLAYSURF.blit(pill_left, pillrect)
+		else:
+			DISPLAYSURF.blit(pill_right, pillrect)
+	elif rotation == 1:
+		if pill_half == 'A':
+			pill_bottom = pygame.transform.rotate(pill_right, 270)
+			DISPLAYSURF.blit(pill_bottom, pillrect)
+		else:
+			pill_top = pygame.transform.rotate(pill_right, 90)
+			DISPLAYSURF.blit(pill_top, pillrect)
+	elif rotation == 2:
+		if pill_half == 'B':
+			pill_left = pygame.transform.rotate(pill_right, 180)
+			DISPLAYSURF.blit(pill_left, pillrect)
+		else:
+			DISPLAYSURF.blit(pill_right, pillrect)
+	elif rotation == 3:
+		if pill_half == 'B':
+			pill_bottom = pygame.transform.rotate(pill_right, 270)
+			DISPLAYSURF.blit(pill_bottom, pillrect)
+		else:
+			pill_top = pygame.transform.rotate(pill_right, 90)
+			DISPLAYSURF.blit(pill_top, pillrect)
+		
 	# pygame.draw.arc(DISPLAYSURF, 
 	# 			COLORS[color], 
 	# 			(pixelx + 1, pixely +1, BOXSIZE - 4, BOXSIZE - 4),
 	# 			30,
 	# 			120)
 
+def drawBoxLanded(boxx, boxy, colorOrient, pixelx=None, pixely=None):
+	if colorOrient == BLANK:
+		return
+	if pixelx == None and pixely == None:
+		pixelx, pixely = convertToPixelCoords(boxx, boxy)
+
+	pill_right = pygame.image.load('%s.png' % (colorOrient % 3,))
+	pillrect = (pixelx + 1, pixely +1, BOXSIZE, BOXSIZE)
+	pill_rotation = colorOrient / 3
+	if pill_rotation == 0:
+		DISPLAYSURF.blit(pill_right, pillrect)
+	elif pill_rotation == 1:
+		pill_top = pygame.transform.rotate(pill_right, 90)
+		DISPLAYSURF.blit(pill_top, pillrect)
+	elif pill_rotation == 2:
+		pill_left = pygame.transform.rotate(pill_right, 180)
+		DISPLAYSURF.blit(pill_left, pillrect)
+	elif pill_rotation == 3:
+		pill_bottom = pygame.transform.rotate(pill_right, 270)
+		DISPLAYSURF.blit(pill_bottom, pillrect)
+
+
 def drawBoard(board):
 	# draw the border around the board
-	pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (XMARGIN - 3, TOPMARGIN - 7, 
-		(BOARDWIDTH * BOXSIZE) + 8, (BOARDHEIGHT * BOXSIZE) + 8), 5)
+	# pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (XMARGIN - 3, TOPMARGIN - 7, 
+	# 	(BOARDWIDTH * BOXSIZE) + 8, (BOARDHEIGHT * BOXSIZE) + 8), 5)
 
 	#fill the background of the board
-	pygame.draw.rect(DISPLAYSURF, BGCOLOR, (XMARGIN, TOPMARGIN, 
-		BOXSIZE * BOARDWIDTH, BOXSIZE * BOARDHEIGHT))
+	# pygame.draw.rect(DISPLAYSURF, BGCOLOR, (XMARGIN, TOPMARGIN, 
+	# 	BOXSIZE * BOARDWIDTH, BOXSIZE * BOARDHEIGHT))
+	background = pygame.image.load('my_checkerboard.jpg')
+	backgroundRect = background.get_rect()
+	DISPLAYSURF.blit(background, backgroundRect)
 
 	#draw the individual boxes on the board
 	for x in range(BOARDWIDTH):
 		for y in range(BOARDHEIGHT):
-			drawBox(x, y, board[x][y])
+			if isinstance(board[x][y], int):
+				drawBoxLanded(x, y, board[x][y])
+			else:
+				drawBox(x, y, board[x][y], 0, 'A')
 
 def drawStatus(score, level):
 	#draw the score text
@@ -462,10 +538,10 @@ def drawPiece(piece, pixelx=None, pixely=None):
 	for x in range(TEMPLATEWIDTH):
 		for y in range(TEMPLATEHEIGHT):
 			if shapeToDraw[y][x] == 'A':
-				drawBox(None, None, piece['A'], pixelx + (x * BOXSIZE), 
+				drawBox(None, None, piece['A'], piece['rotation'], 'A', pixelx + (x * BOXSIZE), 
 						pixely + (y * BOXSIZE))
 			elif shapeToDraw[y][x] == 'B':
-				drawBox(None, None, piece['B'], pixelx + (x * BOXSIZE), 
+				drawBox(None, None, piece['B'], piece['rotation'], 'B', pixelx + (x * BOXSIZE), 
 						pixely + (y * BOXSIZE))
 
 def drawNextPiece(piece):
