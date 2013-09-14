@@ -164,6 +164,10 @@ def runGame():
 				# it's landed, add to board
 				addToBoard(board, fallingPiece)
 				score += removeCompletes(board)
+				findOrphans(board)
+				score += removeCompletes(board)
+				findOrphans(board)
+				score += removeCompletes(board)
 				level, fallFreq = calculateLevelAndFallFreq(score)
 				fallingPiece = None
 			else:
@@ -343,7 +347,31 @@ def shiftRemainingXVert(board, x, y, count):
 	for pullDownY in range(y, count, -1):
 		board[x][pullDownY] = board[x][pullDownY-count]
 
+def dropOrphan(board, x, y):
+	board[x][y + 1] = board[x][y]
+	board[x][y] = BLANK
+	depth = y + 2
+	while depth < (BOARDHEIGHT-1) and (board[x][depth] == BLANK):
+		board[x][depth] = board[x][depth-1]
+		board[x][depth-1] = BLANK
+		depth += 1
+		print 'hi'
 
+def findOrphans(board):
+	y = 0
+	while y < (BOARDHEIGHT - 1):
+		for x in range(0, BOARDWIDTH):
+			if x == (BOARDWIDTH - 1): # if x is against the right wall
+				if (board[x][y]) != BLANK and (board[x][y+1] == BLANK) and (board[x-1][y] == BLANK):
+					dropOrphan(board, x, y)
+			elif x == 0:
+				if (board[x][y]) != BLANK and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK):
+					dropOrphan(board, x, y)
+			else:
+				if (board[x][y]) != BLANK and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK) and (board[x-1][y] == BLANK):
+					print board[x][y+1], board[x+1][y], board[x-1][y]
+					dropOrphan(board, x, y)
+		y += 1
 
 def removeCompletes(board):
 	y = BOARDHEIGHT - 1 #start at bottom of board
