@@ -55,12 +55,14 @@ ORIENTATION = [	  ['..',
 				   'B.']]
 
 def main():
-	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT
+	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete
+	pygame.mixer.pre_init(44100, -16, 2, 512)
 	pygame.init()
 	FPSCLOCK = pygame.time.Clock()
 	DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 	BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
 	BIGFONT = pygame.font.Font('freesansbold.ttf', 100)
+	complete = pygame.mixer.Sound('doctor_music/doctor_sonic.ogg')
 	pygame.display.set_caption('Dr. Mario')
 
 	showTextScreen('Dr. Mario')
@@ -68,7 +70,7 @@ def main():
 		pygame.mixer.music.load('doctor_music/doctor_fever_guitar.ogg')
 		pygame.mixer.music.play(-1, 0.0)
 		runGame()
-		pygame.mixer.music.stop()
+		pygame.mixer.music.fadeout(1000)
 		showTextScreen('Game Over')
 		pygame.mixer.music.load('doctor_music/08_-_Dr._Mario_-_NES_-_VS_Game_Over.ogg')
 		pygame.mixer.music.play(-1, 0.0)
@@ -131,11 +133,11 @@ def runGame():
 				 	lastMoveSidewaysTime = time.time()
 
 				 #rotating the pill (if there's room)
-				elif (event.key == K_UP or event.key == K_w):
+				elif (event.key == K_UP or event.key == K_z):
 					fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
 					if not isValidPosition(board, fallingPiece):
 						fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
-				elif (event.key ==K_q): #other direction
+				elif (event.key ==K_x): #other direction
 					fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
 					if not isValidPosition(board, fallingPiece):
 						fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
@@ -236,8 +238,8 @@ def checkForQuit():
 		pygame.event.post(event) # put other KEYUP event objects back
 
 def calculateLevelAndFallFreq(score):
-	level = int(score / 10) + 1
-	fallFreq = 0.27 - (level * 0.02)
+	level = int(score / 20) + 1
+	fallFreq = 0.27 - (level * 0.01)
 	return level, fallFreq
 
 def getNewPiece():
@@ -312,17 +314,20 @@ def isCompleteSetHoriz(board, y):
 				count += 1
 			else:
 				if count >= 4:
+					complete.play()
 					return x-1, count
 				else:
 					last_color = this_color
 					count = 1
 		else:
 			if count >= 4:
+				complete.play()
 				return x-1, count
 			else:
 				count = 0
 		if x == (BOARDWIDTH - 1):
 			if count >= 4:
+				complete.play()
 				return x, count
 	return False
 
@@ -337,17 +342,20 @@ def isCompleteSetVert(board, x):
 				count += 1
 			else:
 				if count >= 4:
+					complete.play()
 					return y-1, count
 				else:
 					last_color = this_color
 					count = 1
 		else:
 			if count >= 4:
+				complete.play()
 				return y-1, count
 			else:
 				count = 0
 		if y == (BOARDHEIGHT - 1):
 			if count >= 4:
+				complete.play()
 				return y, count
 	if count >= 4:
 		print "fucked up, x is ", x
@@ -443,26 +451,30 @@ def drawBox(boxx, boxy, color, rotation, pill_half, pixelx=None, pixely=None):
 	if rotation == 0:
 		if pill_half == 'A':
 			pill_left = pygame.transform.rotate(pill_right, 180)
-			DISPLAYSURF.blit(pill_left, pillrect)
+			pill_left_flipped = pygame.transform.flip(pill_left, False, True)
+			DISPLAYSURF.blit(pill_left_flipped, pillrect)
 		else:
 			DISPLAYSURF.blit(pill_right, pillrect)
 	elif rotation == 1:
 		if pill_half == 'A':
 			pill_bottom = pygame.transform.rotate(pill_right, 270)
-			DISPLAYSURF.blit(pill_bottom, pillrect)
+			pill_bottom_flipped = pygame.transform.flip(pill_bottom, True, False)
+			DISPLAYSURF.blit(pill_bottom_flipped, pillrect)
 		else:
 			pill_top = pygame.transform.rotate(pill_right, 90)
 			DISPLAYSURF.blit(pill_top, pillrect)
 	elif rotation == 2:
 		if pill_half == 'B':
 			pill_left = pygame.transform.rotate(pill_right, 180)
-			DISPLAYSURF.blit(pill_left, pillrect)
+			pill_left_flipped = pygame.transform.flip(pill_left, False, True)
+			DISPLAYSURF.blit(pill_left_flipped, pillrect)
 		else:
 			DISPLAYSURF.blit(pill_right, pillrect)
 	elif rotation == 3:
 		if pill_half == 'B':
 			pill_bottom = pygame.transform.rotate(pill_right, 270)
-			DISPLAYSURF.blit(pill_bottom, pillrect)
+			pill_bottom_flipped = pygame.transform.flip(pill_bottom, True, False)
+			DISPLAYSURF.blit(pill_bottom_flipped, pillrect)
 		else:
 			pill_top = pygame.transform.rotate(pill_right, 90)
 			DISPLAYSURF.blit(pill_top, pillrect)
@@ -489,10 +501,12 @@ def drawBoxLanded(boxx, boxy, colorOrient, pixelx=None, pixely=None):
 		DISPLAYSURF.blit(pill_top, pillrect)
 	elif pill_rotation == 2:
 		pill_left = pygame.transform.rotate(pill_right, 180)
-		DISPLAYSURF.blit(pill_left, pillrect)
+		pill_left_flipped = pygame.transform.flip(pill_left, False, True)
+		DISPLAYSURF.blit(pill_left_flipped, pillrect)
 	elif pill_rotation == 3:
 		pill_bottom = pygame.transform.rotate(pill_right, 270)
-		DISPLAYSURF.blit(pill_bottom, pillrect)
+		pill_bottom_flipped = pygame.transform.flip(pill_bottom, True, False)
+		DISPLAYSURF.blit(pill_bottom_flipped, pillrect)
 
 
 def drawBoard(board):
