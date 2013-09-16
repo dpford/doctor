@@ -296,7 +296,7 @@ def getInitialBoard():
 		# board.append([BLANK] * BOARDHEIGHT)
 		column = []
 		for p in range(BOARDHEIGHT):
-			if p > (5*BOARDHEIGHT / 12) and MONSTERS < 10 and random.randint(1,4) == 1: #bottom half
+			if p > (5*BOARDHEIGHT / 12) and MONSTERS < 10 and random.randint(1,10) == 1: #bottom half
 				column.append(random.randint(90,92))
 				MONSTERS += 1
 			else:
