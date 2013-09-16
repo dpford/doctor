@@ -56,6 +56,7 @@ ORIENTATION = [	  ['..',
 
 def main():
 	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete
+	# global MONSTERS
 	pygame.mixer.pre_init(44100, -16, 2, 512)
 	pygame.init()
 	FPSCLOCK = pygame.time.Clock()
@@ -63,15 +64,16 @@ def main():
 	BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
 	BIGFONT = pygame.font.Font('freesansbold.ttf', 100)
 	complete = pygame.mixer.Sound('doctor_music/doctor_sonic.ogg')
+	# MONSTERS = 0
 	pygame.display.set_caption('Dr. Mario')
 
 	showTextScreen('Dr. Mario')
 	while True: #game loop
 		pygame.mixer.music.load('doctor_music/doctor_fever_guitar.ogg')
 		pygame.mixer.music.play(-1, 0.0)
-		runGame()
+		message = runGame()
 		pygame.mixer.music.fadeout(1000)
-		showTextScreen('Game Over')
+		showTextScreen('%s' % (message,))
 		pygame.mixer.music.load('doctor_music/08_-_Dr._Mario_-_NES_-_VS_Game_Over.ogg')
 		pygame.mixer.music.play(-1, 0.0)
 
@@ -97,9 +99,11 @@ def runGame():
 			lastFallTime = time.time() #reset lastFallTime
 
 			if not isValidPosition(board, fallingPiece):
-				return # can't find a new pill, so you lose!
+				return 'Game Over'# can't find a new pill, so you lose!
 
 		checkForQuit()
+		if MONSTERS == 0:
+			return 'You Win!'
 		for event in pygame.event.get(): #event handling loop
 			if event.type == KEYUP:
 				if (event.key == K_p): # pause game
@@ -165,6 +169,9 @@ def runGame():
 			if not isValidPosition(board, fallingPiece, adjY=1):
 				# it's landed, add to board
 				addToBoard(board, fallingPiece)
+# THIS WAS LAZY, FIX THIS _________________________________***************************************************
+				score += removeCompletes(board)
+				findOrphans(board)
 				score += removeCompletes(board)
 				findOrphans(board)
 				score += removeCompletes(board)
@@ -179,7 +186,7 @@ def runGame():
 		# draw everything on the screen
 		DISPLAYSURF.fill(BGCOLOR)
 		drawBoard(board)
-		drawStatus(score, level)
+		drawStatus(score, level, MONSTERS)
 		drawNextPiece(nextPiece)
 		if fallingPiece != None:
 			drawPiece(fallingPiece)
@@ -282,9 +289,19 @@ def addToBoard(board, piece):
 				board[x + piece['x']][y + piece['y']] = put_on_board
 
 def getInitialBoard():
+	global MONSTERS
+	MONSTERS = 0
 	board = []
 	for i in range(BOARDWIDTH):
-		board.append([BLANK] * BOARDHEIGHT)
+		# board.append([BLANK] * BOARDHEIGHT)
+		column = []
+		for p in range(BOARDHEIGHT):
+			if p > (5*BOARDHEIGHT / 12) and MONSTERS < 10 and random.randint(1,4) == 1: #bottom half
+				column.append(random.randint(90,92))
+				MONSTERS += 1
+			else:
+				column.append(BLANK)
+		board.append(column)
 	return board
 
 def isOnBoard(x, y):
@@ -304,7 +321,9 @@ def isValidPosition(board, piece, adjX=0, adjY=0):
 	return True
 
 def isCompleteSetHoriz(board, y):
+	global MONSTERS
 	count = 0
+	monster_count = 0
 	last_color = -1
 	for x in range(BOARDWIDTH):
 		if board[x][y] != BLANK:
@@ -312,27 +331,39 @@ def isCompleteSetHoriz(board, y):
 			if (this_color == last_color) or (last_color == -1):
 				last_color = this_color
 				count += 1
+				if board[x][y] > 11:
+					monster_count += 1
 			else:
 				if count >= 4:
 					complete.play()
+					MONSTERS = MONSTERS - monster_count
 					return x-1, count
 				else:
 					last_color = this_color
 					count = 1
+					if board[x][y] > 11:
+						monster_count = 1
+					else:
+						monster_count = 0
 		else:
 			if count >= 4:
 				complete.play()
+				MONSTERS = MONSTERS - monster_count
 				return x-1, count
 			else:
 				count = 0
+				monster_count = 0
 		if x == (BOARDWIDTH - 1):
 			if count >= 4:
 				complete.play()
+				MONSTERS = MONSTERS - monster_count
 				return x, count
 	return False
 
 def isCompleteSetVert(board, x):
+	global MONSTERS
 	count = 0
+	monster_count = 0
 	last_color = -1
 	for y in range(BOARDHEIGHT):
 		if board[x][y] != BLANK:
@@ -340,22 +371,32 @@ def isCompleteSetVert(board, x):
 			if (this_color == last_color) or (last_color == -1):
 				last_color = this_color
 				count += 1
+				if board[x][y] > 11:
+					monster_count += 1
 			else:
 				if count >= 4:
 					complete.play()
+					MONSTERS = MONSTERS - monster_count
 					return y-1, count
 				else:
 					last_color = this_color
 					count = 1
+					if board[x][y] > 11:
+						monster_count = 1
+					else:
+						monster_count = 0
 		else:
 			if count >= 4:
 				complete.play()
+				MONSTERS = MONSTERS - monster_count
 				return y-1, count
 			else:
 				count = 0
+				monster_count = 0
 		if y == (BOARDHEIGHT - 1):
 			if count >= 4:
 				complete.play()
+				MONSTERS = MONSTERS - monster_count
 				return y, count
 	if count >= 4:
 		print "fucked up, x is ", x
@@ -389,13 +430,13 @@ def findOrphans(board):
 	while y < (BOARDHEIGHT - 1):
 		for x in range(0, BOARDWIDTH):
 			if x == (BOARDWIDTH - 1): # if x is against the right wall
-				if (board[x][y]) != BLANK and (board[x][y+1] == BLANK) and (board[x-1][y] == BLANK):
+				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
 					dropOrphan(board, x, y)
 			elif x == 0:
-				if (board[x][y]) != BLANK and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK):
+				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11):
 					dropOrphan(board, x, y)
 			else:
-				if (board[x][y]) != BLANK and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK) and (board[x-1][y] == BLANK):
+				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
 					print board[x][y+1], board[x+1][y], board[x-1][y]
 					dropOrphan(board, x, y)
 		y += 1
@@ -491,6 +532,16 @@ def drawBoxLanded(boxx, boxy, colorOrient, pixelx=None, pixely=None):
 	if pixelx == None and pixely == None:
 		pixelx, pixely = convertToPixelCoords(boxx, boxy)
 
+	if colorOrient > 11: #must be a monster
+		monster_pic = pygame.image.load('virus%s.png' % (colorOrient % 3,))
+		monster_rect = (pixelx + 1, pixely +1, BOXSIZE, BOXSIZE)
+		DISPLAYSURF.blit(monster_pic, monster_rect)
+		# pygame.draw.circle(DISPLAYSURF, 
+		# 					COLORS[colorOrient % 3], 
+		# 					(pixelx + (BOXSIZE/2), pixely + (BOXSIZE/2)),
+		# 					10)
+
+
 	pill_right = pygame.image.load('%s.png' % (colorOrient % 3,))
 	pillrect = (pixelx + 1, pixely +1, BOXSIZE, BOXSIZE)
 	pill_rotation = colorOrient / 3
@@ -529,7 +580,7 @@ def drawBoard(board):
 			else:
 				drawBox(x, y, board[x][y], 0, 'A')
 
-def drawStatus(score, level):
+def drawStatus(score, level, monsters):
 	#draw the score text
 	scoreSurf = BASICFONT.render('Score: %s' % score, True, TEXTCOLOR)
 	scoreRect = scoreSurf.get_rect()
@@ -541,6 +592,12 @@ def drawStatus(score, level):
 	levelRect = levelSurf.get_rect()
 	levelRect.topleft = (WINDOWWIDTH - 150, 50)
 	DISPLAYSURF.blit(levelSurf, levelRect)
+
+	#draw monsters
+	virusSurf = BASICFONT.render('Virus: %s' % monsters, True, TEXTCOLOR)
+	virusRect = virusSurf.get_rect()
+	virusRect.topleft = (WINDOWWIDTH - 600, 20)
+	DISPLAYSURF.blit(virusSurf, virusRect)
 
 def drawPiece(piece, pixelx=None, pixely=None):
 	shapeToDraw = ORIENTATION[piece['rotation']]
