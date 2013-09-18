@@ -432,7 +432,7 @@ def findOrphans(board):
 			if x == (BOARDWIDTH - 1): # if x is against the right wall
 				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
 					dropOrphan(board, x, y)
-			elif x == 0:
+			elif x == 0: # against the left wall
 				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11):
 					dropOrphan(board, x, y)
 			else:
@@ -440,6 +440,22 @@ def findOrphans(board):
 					print board[x][y+1], board[x+1][y], board[x-1][y]
 					dropOrphan(board, x, y)
 		y += 1
+	# for x in range(BOARDWIDTH):
+	# 	continue = True
+	# 	for y in range (BOARDHEIGHT -2, -1, -1):
+	# 		if continue = True:
+	# 			if x == (BOARDWIDTH - 1): # if x is against the right wall
+	# 				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
+	# 					dropOrphan(board, x, y)
+	# 			elif x == 0: # against the left wall
+	# 				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11):
+	# 					dropOrphan(board, x, y)
+	# 			else:
+	# 				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
+	# 					print board[x][y+1], board[x+1][y], board[x-1][y]
+	# 					dropOrphan(board, x, y)
+
+
 
 def removeCompletes(board):
 	y = BOARDHEIGHT - 1 #start at bottom of board
