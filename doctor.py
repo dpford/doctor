@@ -173,10 +173,6 @@ def runGame():
 				score += removeCompletes(board)
 				findOrphans(board)
 				score += removeCompletes(board)
-				findOrphans(board)
-				score += removeCompletes(board)
-				findOrphans(board)
-				score += removeCompletes(board)
 				level, fallFreq = calculateLevelAndFallFreq(score)
 				fallingPiece = None
 			else:
@@ -416,44 +412,72 @@ def shiftRemainingXVert(board, x, y, count):
 		board[x][pullDownY] = board[x][pullDownY-count]
 
 def dropOrphan(board, x, y):
-	board[x][y + 1] = board[x][y]
-	board[x][y] = BLANK
-	depth = y + 2
-	while depth < (BOARDHEIGHT-1) and (board[x][depth] == BLANK):
-		board[x][depth] = board[x][depth-1]
-		board[x][depth-1] = BLANK
-		depth += 1
-		print 'hi'
+	# board[x][y + 1] = board[x][y]
+	# board[x][y] = BLANK
+	# depth = y + 2
+	# while depth < (BOARDHEIGHT-1) and (board[x][depth] == BLANK):
+	# 	board[x][depth] = board[x][depth-1]
+	# 	board[x][depth-1] = BLANK
+	# 	depth += 1
+	# 	print 'hi'
+	additional = 0
+	drop_height = 0
+	for height in range(y-1, -1, -1):
+		if isAlsoOrphan(board, x, height):
+			additional += 1
+	for drop in range(y+1, BOARDHEIGHT):
+		if board[x][drop] == BLANK:
+			drop_height += 1
+
+	#actually do the drop
+	for actual_drop in range(y, y+drop_height):
+		board[x][actual_drop-additional+1:actual_drop+2] = board[x][actual_drop - additional:actual_drop+1]
+		board[x][actual_drop - additional] = BLANK
+
+def isAlsoOrphan(board, x, y):
+	if board[x][y] > 11: #if it's a virus
+		return False
+	if x == (BOARDWIDTH - 1): # if x is against the right wall
+		if board[x-1][y] == BLANK:
+			return True
+	elif x == 0: # against the left wall
+		if board[x+1][y] == BLANK:
+			return True
+	else:
+		if (board[x-1][y] == BLANK) and (board[x+1][y] == BLANK):
+			return True
+	return False
+
 
 def findOrphans(board):
-	y = 0
-	while y < (BOARDHEIGHT - 1):
-		for x in range(0, BOARDWIDTH):
-			if x == (BOARDWIDTH - 1): # if x is against the right wall
-				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
-					dropOrphan(board, x, y)
-			elif x == 0: # against the left wall
-				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11):
-					dropOrphan(board, x, y)
-			else:
-				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
-					print board[x][y+1], board[x+1][y], board[x-1][y]
-					dropOrphan(board, x, y)
-		y += 1
-	# for x in range(BOARDWIDTH):
-	# 	continue = True
-	# 	for y in range (BOARDHEIGHT -2, -1, -1):
-	# 		if continue = True:
-	# 			if x == (BOARDWIDTH - 1): # if x is against the right wall
-	# 				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
-	# 					dropOrphan(board, x, y)
-	# 			elif x == 0: # against the left wall
-	# 				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11):
-	# 					dropOrphan(board, x, y)
-	# 			else:
-	# 				if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
-	# 					print board[x][y+1], board[x+1][y], board[x-1][y]
-	# 					dropOrphan(board, x, y)
+	# y = 0
+	# while y < (BOARDHEIGHT - 1):
+	# 	for x in range(0, BOARDWIDTH):
+	# 		if x == (BOARDWIDTH - 1): # if x is against the right wall
+	# 			if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
+	# 				dropOrphan(board, x, y)
+	# 		elif x == 0: # against the left wall
+	# 			if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11):
+	# 				dropOrphan(board, x, y)
+	# 		else:
+	# 			if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
+	# 				print board[x][y+1], board[x+1][y], board[x-1][y]
+	# 				dropOrphan(board, x, y)
+	# 	y += 1
+	for x in range(BOARDWIDTH):
+		continue_now = True
+		for y in range (BOARDHEIGHT -2, -1, -1):
+			if continue_now == True:
+				if x == (BOARDWIDTH - 1): # if x is against the right wall
+					if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
+						dropOrphan(board, x, y)
+				elif x == 0: # against the left wall
+					if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11):
+						dropOrphan(board, x, y)
+				else:
+					if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
+						print board[x][y+1], board[x+1][y], board[x-1][y]
+						dropOrphan(board, x, y)
 
 
 
