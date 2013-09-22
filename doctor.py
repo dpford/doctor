@@ -67,6 +67,11 @@ def main():
 	# MONSTERS = 0
 	pygame.display.set_caption('Dr. Mario')
 
+	if pygame.joystick.get_count() == 0:
+		print 'no joysticks'
+	else:
+		pygame.joystick.Joystick(0).init()
+
 	showTextScreen('Dr. Mario')
 	while True: #game loop
 		pygame.mixer.music.load('doctor_music/doctor_fever_guitar.ogg')
@@ -105,8 +110,8 @@ def runGame():
 		if MONSTERS == 0:
 			return 'You Win!'
 		for event in pygame.event.get(): #event handling loop
-			if event.type == KEYUP:
-				if (event.key == K_p): # pause game
+			if event.type == JOYBUTTONUP:
+				if (event.button == 3): # pause game
 					DISPLAYSURF.fill(BGCOLOR)
 					pygame.mixer.music.stop()
 					showTextScreen('Paused') #until a key is pressed
@@ -114,43 +119,69 @@ def runGame():
 					lastFallTime = time.time()
 					lastMoveDownTime = time.time()
 					lastMoveSidewaysTime = time.time()
-				elif (event.key == K_LEFT or event.key == K_a):
-					movingLeft = False
-				elif (event.key == K_RIGHT or event.key == K_d):
-					movingRight = False
-				elif (event.key == K_DOWN or event.key == K_s):
-					movingDown = False
+				#elif (event.key == K_LEFT or event.key == K_a):
+				#	movingLeft = False
+				#elif (event.key == K_RIGHT or event.key == K_d):
+				#	movingRight = False
+				#elif (event.key == K_DOWN or event.key == K_s):
+				#	movingDown = False
+			
 
-			elif event.type == KEYDOWN:
+			elif event.type == JOYBUTTONDOWN:
 				# moving block sideways
-				if (event.key == K_LEFT or event.key == K_a) and \
-					isValidPosition(board, fallingPiece, adjX=-1):
-				 	fallingPiece['x'] -= 1
-				 	movingLeft = True
-				 	movingRight = False
-				 	lastMoveSidewaysTime = time.time()
+				#if (event.button == K_LEFT or event.key == K_a) and \
+				#	isValidPosition(board, fallingPiece, adjX=-1):
+				# 	fallingPiece['x'] -= 1
+				# 	movingLeft = True
+				# 	movingRight = False
+				# 	lastMoveSidewaysTime = time.time()
 
-				elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
-				 	fallingPiece['x'] += 1
-				 	movingRight = True
-				 	movingLeft = False
-				 	lastMoveSidewaysTime = time.time()
+				#elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
+				# 	fallingPiece['x'] += 1
+				# 	movingRight = True
+				# 	movingLeft = False
+				# 	lastMoveSidewaysTime = time.time()
 
 				 #rotating the pill (if there's room)
-				elif (event.key == K_UP or event.key == K_z):
+				if (event.button == 1):
 					fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
 					if not isValidPosition(board, fallingPiece):
 						fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
-				elif (event.key ==K_x): #other direction
+				elif (event.button == 5): #other direction
 					fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
 					if not isValidPosition(board, fallingPiece):
 						fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
 				# drop pill faster with down key
-				elif (event.key == K_DOWN or event.key == K_s):
+				#elif (event.key == K_DOWN or event.key == K_s):
+				#	movingDown = True
+				#	if isValidPosition(board, fallingPiece, adjY=1):
+				#		fallingPiece['y'] += 1
+				#	lastMoveDownTime = time.time()
+			elif event.type == JOYAXISMOTION:
+				# axis stuff
+				print 'axis is %s, value is %s' % (event.axis, event.value)
+				if (event.axis == 0) and (event.value == 1) and isValidPosition(board, fallingPiece, adjX=1):
+					fallingPiece['x'] += 1
+					movingRight = True
+				 	movingLeft = False
+				 	lastMoveSidewaysTime = time.time()
+				elif (event.axis == 0) and (event.value == 0):
+					movingLeft = False
+					movingRight = False
+				elif (event.axis == 1) and (event.value == 1):
 					movingDown = True
 					if isValidPosition(board, fallingPiece, adjY=1):
 						fallingPiece['y'] += 1
 					lastMoveDownTime = time.time()
+				elif (event.axis == 1) and (event.value == 0):
+					movingDown = False
+				elif (event.axis == 0) and int(event.value) == -1 and isValidPosition(board, fallingPiece, adjX=-1):
+					fallingPiece['x'] -= 1
+				 	movingLeft = True
+				 	movingRight = False
+				 	lastMoveSidewaysTime = time.time()
+					
+
 
 		if (movingLeft or movingRight) and time.time() - lastMoveSidewaysTime > MOVESIDEWAYSFREQ:
 			if movingLeft and isValidPosition(board, fallingPiece, adjX=-1):
