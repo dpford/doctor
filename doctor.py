@@ -67,7 +67,7 @@ def main():
 	# MONSTERS = 0
 	pygame.display.set_caption('Dr. Mario')
 
-	if pygame.joystick.get_count() == 0:
+	if pygame.joystick.get_count() == 0 or pygame.joystick.Joystick(0).get_name()[:10] == 'VirtualBox':
 		print 'no joysticks'
 	else:
 		pygame.joystick.Joystick(0).init()
@@ -111,37 +111,20 @@ def runGame():
 			return 'You Win!'
 		for event in pygame.event.get(): #event handling loop
 			if event.type == JOYBUTTONUP:
+				print "joybuttonup"
 				if (event.button == 3): # pause game
+					print "thinks its pausing"
 					DISPLAYSURF.fill(BGCOLOR)
 					pygame.mixer.music.stop()
 					showTextScreen('Paused') #until a key is pressed
 					pygame.mixer.music.play(-1, 0.0)
 					lastFallTime = time.time()
 					lastMoveDownTime = time.time()
-					lastMoveSidewaysTime = time.time()
-				#elif (event.key == K_LEFT or event.key == K_a):
-				#	movingLeft = False
-				#elif (event.key == K_RIGHT or event.key == K_d):
-				#	movingRight = False
-				#elif (event.key == K_DOWN or event.key == K_s):
-				#	movingDown = False
-			
+					lastMoveSidewaysTime = time.time()			
 
 			elif event.type == JOYBUTTONDOWN:
-				# moving block sideways
-				#if (event.button == K_LEFT or event.key == K_a) and \
-				#	isValidPosition(board, fallingPiece, adjX=-1):
-				# 	fallingPiece['x'] -= 1
-				# 	movingLeft = True
-				# 	movingRight = False
-				# 	lastMoveSidewaysTime = time.time()
-
-				#elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
-				# 	fallingPiece['x'] += 1
-				# 	movingRight = True
-				# 	movingLeft = False
-				# 	lastMoveSidewaysTime = time.time()
-
+				print "joybuttondown"
+				
 				 #rotating the pill (if there's room)
 				if (event.button == 1):
 					fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
@@ -151,15 +134,10 @@ def runGame():
 					fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
 					if not isValidPosition(board, fallingPiece):
 						fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
-				# drop pill faster with down key
-				#elif (event.key == K_DOWN or event.key == K_s):
-				#	movingDown = True
-				#	if isValidPosition(board, fallingPiece, adjY=1):
-				#		fallingPiece['y'] += 1
-				#	lastMoveDownTime = time.time()
+				
 			elif event.type == JOYAXISMOTION:
+				print "motion"
 				# axis stuff
-				print 'axis is %s, value is %s' % (event.axis, event.value)
 				if (event.axis == 0) and (event.value == 1) and isValidPosition(board, fallingPiece, adjX=1):
 					fallingPiece['x'] += 1
 					movingRight = True
@@ -180,6 +158,55 @@ def runGame():
 				 	movingLeft = True
 				 	movingRight = False
 				 	lastMoveSidewaysTime = time.time()
+
+			elif event.type == KEYUP:
+				if (event.key == K_p): # pause game
+					DISPLAYSURF.fill(BGCOLOR)
+					pygame.mixer.music.stop()
+					showTextScreen('Paused') #until a key is pressed
+					pygame.mixer.music.play(-1, 0.0)
+					lastFallTime = time.time()
+					lastMoveDownTime = time.time()
+					lastMoveSidewaysTime = time.time()
+				elif (event.key == K_LEFT or event.key == K_a):
+					movingLeft = False
+				elif (event.key == K_RIGHT or event.key == K_d):
+					movingRight = False
+				elif (event.key == K_DOWN or event.key == K_s):
+					movingDown = False
+
+			elif event.type == KEYDOWN:
+				# moving block sideways
+				if (event.key == K_LEFT or event.key == K_a) and \
+					isValidPosition(board, fallingPiece, adjX=-1):
+				 	fallingPiece['x'] -= 1
+				 	movingLeft = True
+				 	movingRight = False
+				 	lastMoveSidewaysTime = time.time()
+
+				elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
+				 	fallingPiece['x'] += 1
+				 	movingRight = True
+				 	movingLeft = False
+				 	lastMoveSidewaysTime = time.time()
+
+				 #rotating the pill (if there's room)
+				elif (event.key == K_UP or event.key == K_z):
+					fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
+					if not isValidPosition(board, fallingPiece):
+						fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
+				elif (event.key ==K_x): #other direction
+					fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
+					if not isValidPosition(board, fallingPiece):
+						fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
+				# drop pill faster with down key
+				elif (event.key == K_DOWN or event.key == K_s):
+					movingDown = True
+					if isValidPosition(board, fallingPiece, adjY=1):
+						fallingPiece['y'] += 1
+					lastMoveDownTime = time.time()
+
+
 					
 
 
@@ -288,7 +315,6 @@ def getNewPiece():
 
 def addToBoard(board, piece):
 	# fill in the board based on piece's location
-	print piece
 	for x in range(TEMPLATEWIDTH):
 		for y in range(TEMPLATEHEIGHT):
 			if ORIENTATION[piece['rotation']][y][x] == 'A':
@@ -302,7 +328,6 @@ def addToBoard(board, piece):
 				elif piece['rotation'] == 3:
 					put_on_board = piece['A'] + 3
 				board[x + piece['x']][y + piece['y']] = put_on_board
-				print piece['A']
 			elif ORIENTATION[piece['rotation']][y][x] == 'B':
 				if piece['rotation'] == 0:
 					put_on_board = piece['B']
@@ -312,7 +337,6 @@ def addToBoard(board, piece):
 					put_on_board = piece['B'] + 6
 				elif piece['rotation'] == 3:
 					put_on_board = piece['B'] + 9
-				print "put on board B is " + str(put_on_board)
 				board[x + piece['x']][y + piece['y']] = put_on_board
 
 def getInitialBoard():
@@ -425,20 +449,14 @@ def isCompleteSetVert(board, x):
 				complete.play()
 				MONSTERS = MONSTERS - monster_count
 				return y, count
-	if count >= 4:
-		print "fucked up, x is ", x
 	return False
 
 def shiftRemainingYHoriz(board, x, count, y):
-	print "x is " + str(x)
-	print "y is " + str(y)
-	print "count is " + str(count)
 	for pullDownY in range(y, 0, -1):
 		for x_1 in range(x, x-count, -1):
 			board[x_1][pullDownY] = board[x_1][pullDownY-1]
 
 def shiftRemainingXVert(board, x, y, count):
-	print "y is " + str(y)
 	for pullDownY in range(y, count, -1):
 		board[x][pullDownY] = board[x][pullDownY-count]
 
@@ -507,7 +525,6 @@ def findOrphans(board):
 						dropOrphan(board, x, y)
 				else:
 					if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
-						print board[x][y+1], board[x+1][y], board[x-1][y]
 						dropOrphan(board, x, y)
 
 
@@ -517,16 +534,13 @@ def removeCompletes(board):
 	while y >= 0:
 		setLocation = isCompleteSetHoriz(board, y)
 		if setLocation:
-			print "horiz"
 			shiftRemainingYHoriz(board, setLocation[0], setLocation[1], y)
-			print 'complete line y, y is %s, setLocation is %s' % (y, setLocation)
 		else:
 			y -= 1
 	x = BOARDWIDTH - 1
 	while x >= 0:
 		setLocation = isCompleteSetVert(board, x)
 		if setLocation:
-			print "vert"
 			shiftRemainingXVert(board, x, setLocation[0], setLocation[1])
 		else:
 			x -= 1
