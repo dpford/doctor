@@ -261,10 +261,11 @@ def checkForKeyPress():
 	# Grab KEYDOWN events to remove them from the queue
 	checkForQuit()
 
-	for event in pygame.event.get([KEYDOWN, KEYUP]):
-		if event.type == KEYDOWN:
-			continue
-		return event.key
+	for event in pygame.event.get([KEYDOWN, KEYUP, JOYBUTTONDOWN, JOYBUTTONUP]):
+		if event.type == KEYUP:
+			return event.key
+		elif event.type == JOYBUTTONUP:
+			return event.button
 	return None
 
 def showTextScreen(text):
@@ -452,13 +453,29 @@ def isCompleteSetVert(board, x):
 	return False
 
 def shiftRemainingYHoriz(board, x, count, y):
+	keep_going = True
 	for pullDownY in range(y, 0, -1):
-		for x_1 in range(x, x-count, -1):
-			board[x_1][pullDownY] = board[x_1][pullDownY-1]
+		if keep_going:
+			for x_1 in range(x, x-count, -1):
+				if board[x_1][pullDownY-1] != BLANK and board[x_1][pullDownY-1] > 11:
+					keep_going = False
+					print 'falsed at %s, %s. piece is %s' % (x_1, pullDownY-1, board[x_1][pullDownY-1])
+				else:
+					board[x_1][pullDownY] = board[x_1][pullDownY-1]
 
 def shiftRemainingXVert(board, x, y, count):
+	board[x][y-count+1:y+1] = BLANK * count
 	for pullDownY in range(y, count, -1):
-		board[x][pullDownY] = board[x][pullDownY-count]
+		if board[x][pullDownY-count] != BLANK and board[x][pullDownY-count] > 11:
+			break
+		else:
+			board[x][pullDownY] = board[x][pullDownY-count]
+	# keep_going = True
+	# for pullDownY in range(y, count, -1):
+	# 	if board[x][pullDownY-1] != BLANK and board[x][pullDownY-1] > 11:
+	# 		break
+	# 	else:
+			# board[x][pullDownY] = board[x][pullDownY-count]
 
 def dropOrphan(board, x, y):
 	# board[x][y + 1] = board[x][y]
@@ -477,6 +494,8 @@ def dropOrphan(board, x, y):
 	for drop in range(y+1, BOARDHEIGHT):
 		if board[x][drop] == BLANK:
 			drop_height += 1
+		else:
+			break
 
 	#actually do the drop
 	for actual_drop in range(y, y+drop_height):
