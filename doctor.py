@@ -10,6 +10,8 @@ import math
 
 from pygame.locals import *
 
+STARTING_VIRUS_COUNT = 30
+
 FPS = 25
 WINDOWWIDTH = 640
 WINDOWHEIGHT = 480
@@ -55,24 +57,26 @@ ORIENTATION = [	  ['..',
 				   'B.']]
 
 def main():
-	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete
+	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete, BIGVIRUSCOUNTFONT, INGAMETITLEFONT
 	# global MONSTERS
 	pygame.mixer.pre_init(44100, -16, 2, 512)
 	pygame.init()
 	FPSCLOCK = pygame.time.Clock()
 	DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
-	BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
-	BIGFONT = pygame.font.Font('freesansbold.ttf', 100)
+	BASICFONT = pygame.font.Font('fonts/PressStart2P.ttf', 20)
+	BIGVIRUSCOUNTFONT = pygame.font.Font('fonts/PressStart2P.ttf', 70)
+	BIGFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 60)
+	INGAMETITLEFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 30)
 	complete = pygame.mixer.Sound('doctor_music/doctor_sonic.ogg')
 	# MONSTERS = 0
-	pygame.display.set_caption('Dr. Mario')
+	pygame.display.set_caption("Fuckin' Dr. Mario")
 
 	if pygame.joystick.get_count() == 0 or pygame.joystick.Joystick(0).get_name()[:10] == 'VirtualBox':
 		print 'no joysticks'
 	else:
 		pygame.joystick.Joystick(0).init()
 
-	showTextScreen('Dr. Mario')
+	showTextScreen("Fuckin' Dr. Mario")
 	while True: #game loop
 		pygame.mixer.music.load('doctor_music/doctor_fever_guitar.ogg')
 		pygame.mixer.music.play(-1, 0.0)
@@ -136,7 +140,6 @@ def runGame():
 						fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
 				
 			elif event.type == JOYAXISMOTION:
-				print "motion"
 				# axis stuff
 				if (event.axis == 0) and (event.value == 1) and isValidPosition(board, fallingPiece, adjX=1):
 					fallingPiece['x'] += 1
@@ -348,7 +351,7 @@ def getInitialBoard():
 		# board.append([BLANK] * BOARDHEIGHT)
 		column = []
 		for p in range(BOARDHEIGHT):
-			if p > (5*BOARDHEIGHT / 12) and MONSTERS < 10 and random.randint(1,10) == 1: #bottom half
+			if p > (5*BOARDHEIGHT / 12) and MONSTERS < STARTING_VIRUS_COUNT and random.randint(1,10) < 3: #bottom half
 				column.append(random.randint(90,92))
 				MONSTERS += 1
 			else:
@@ -688,20 +691,33 @@ def drawStatus(score, level, monsters):
 	#draw the score text
 	scoreSurf = BASICFONT.render('Score: %s' % score, True, TEXTCOLOR)
 	scoreRect = scoreSurf.get_rect()
-	scoreRect.topleft = (WINDOWWIDTH - 150, 20)
+	scoreRect.topleft = (WINDOWWIDTH - 190, 80)
 	DISPLAYSURF.blit(scoreSurf, scoreRect)
 
 	#draw the level text
 	levelSurf = BASICFONT.render('Level: %s' % level, True, TEXTCOLOR)
 	levelRect = levelSurf.get_rect()
-	levelRect.topleft = (WINDOWWIDTH - 150, 50)
+	levelRect.topleft = (WINDOWWIDTH - 190, 110)
 	DISPLAYSURF.blit(levelSurf, levelRect)
 
-	#draw monsters
-	virusSurf = BASICFONT.render('Virus: %s' % monsters, True, TEXTCOLOR)
+	#draw count reamining
+	virusCountSurf = BIGVIRUSCOUNTFONT.render('%s' % monsters, True, TEXTCOLOR)
+	virusCountRect = virusCountSurf.get_rect()
+	virusCountRect.topleft = (WINDOWWIDTH - 595, 90)
+	DISPLAYSURF.blit(virusCountSurf, virusCountRect)
+
+	#draw text below count
+	virusSurf = BASICFONT.render('remaining', True, TEXTCOLOR)
 	virusRect = virusSurf.get_rect()
-	virusRect.topleft = (WINDOWWIDTH - 600, 20)
+	virusRect.topleft = (WINDOWWIDTH - 620, 180)
 	DISPLAYSURF.blit(virusSurf, virusRect)
+
+	#show game name
+	nameSurf = INGAMETITLEFONT.render("Fuckin' Dr. Mario", True, TEXTCOLOR)
+	nameRect = nameSurf.get_rect()
+	nameRect.topleft = (WINDOWWIDTH - 455, 20)
+	DISPLAYSURF.blit(nameSurf, nameRect)
+
 
 def drawPiece(piece, pixelx=None, pixely=None):
 	shapeToDraw = ORIENTATION[piece['rotation']]
@@ -723,10 +739,10 @@ def drawNextPiece(piece):
 	# draw the next text
 	nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR)
 	nextRect = nextSurf.get_rect()
-	nextRect.topleft = (WINDOWWIDTH - 120, 80)
+	nextRect.topleft = (WINDOWWIDTH - 155, 180)
 	DISPLAYSURF.blit(nextSurf, nextRect)
 	#draw the next piece
-	drawPiece(piece, pixelx=WINDOWWIDTH-120, pixely=100)
+	drawPiece(piece, pixelx=WINDOWWIDTH-135, pixely=210)
 
 if __name__ == '__main__':
 	main()
