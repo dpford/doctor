@@ -76,6 +76,7 @@ def main():
 		print 'no joysticks'
 	else:
 		pygame.joystick.Joystick(0).init()
+		pygame.joystick.Joystick(1).init()
 
 	showTextScreen("Fuckin' Dr. Mario")
 	while True: #game loop
@@ -88,32 +89,60 @@ def main():
 		pygame.mixer.music.play(-1, 0.0)
 
 def runGame():
-	board = getInitialBoard()
-	lastMoveDownTime = time.time()
-	lastMoveSidewaysTime = time.time()
-	lastFallTime = time.time()
-	movingDown = False
-	movingLeft = False
-	movingRight = False
-	score = 0
-	level, fallFreq = calculateLevelAndFallFreq(score)
+	# Player 1
+	board1 = getInitialBoard()
+	lastMoveDownTime1 = time.time()
+	lastMoveSidewaysTime1 = time.time()
+	lastFallTime1 = time.time()
+	movingDown1 = False
+	movingLeft1 = False
+	movingRight1 = False
+	score1 = 0
+	level1, fallFreq1 = calculateLevelAndFallFreq(score)
 
-	fallingPiece = getNewPiece()
-	nextPiece = getNewPiece()
+	fallingPiece1 = getNewPiece()
+	nextPiece1 = getNewPiece()
+
+	# Player 2
+	board2 = getInitialBoard()
+	lastMoveDownTime2 = time.time()
+	lastMoveSidewaysTime2 = time.time()
+	lastFallTime2 = time.time()
+	movingDown2 = False
+	movingLeft2 = False
+	movingRight2 = False
+	score2 = 0
+	level2, fallFreq2 = calculateLevelAndFallFreq(score)
+
+	fallingPiece2 = getNewPiece()
+	nextPiece2 = getNewPiece()
+
 
 	while True: #main game loop
-		if fallingPiece == None:
+		#Player 1
+		if fallingPiece1 == None:
 			# No falling pill in play, so put one at the top
-			fallingPiece = nextPiece
-			nextPiece = getNewPiece()
-			lastFallTime = time.time() #reset lastFallTime
+			fallingPiece1 = nextPiece1
+			nextPiece1 = getNewPiece()
+			lastFallTime1 = time.time() #reset lastFallTime
 
-			if not isValidPosition(board, fallingPiece):
+			if not isValidPosition(board1, fallingPiece1):
+				return 'Game Over'# can't find a new pill, so you lose!
+		#Player 2
+		if fallingPiece2 == None:
+			# No falling pill in play, so put one at the top
+			fallingPiece2 = nextPiece2
+			nextPiece2 = getNewPiece()
+			lastFallTime2 = time.time() #reset lastFallTime
+
+			if not isValidPosition(board2, fallingPiece2):
 				return 'Game Over'# can't find a new pill, so you lose!
 
 		checkForQuit()
-		if MONSTERS == 0:
-			return 'You Win!'
+		if MONSTERS1 == 0:
+			return 'Player 1 Wins!'
+		elif MONSTERS2 == 0:
+			return 'Player 2 Wins!'
 		for event in pygame.event.get(): #event handling loop
 			if event.type == JOYBUTTONUP:
 				print "joybuttonup"
@@ -123,45 +152,84 @@ def runGame():
 					pygame.mixer.music.stop()
 					showTextScreen('Paused') #until a key is pressed
 					pygame.mixer.music.play(-1, 0.0)
-					lastFallTime = time.time()
-					lastMoveDownTime = time.time()
-					lastMoveSidewaysTime = time.time()			
+					lastFallTime1 = time.time()
+					lastMoveDownTime1 = time.time()
+					lastMoveSidewaysTime1 = time.time()
+					lastFallTime2 = time.time()
+					lastMoveDownTime2 = time.time()
+					lastMoveSidewaysTime2 = time.time()			
 
 			elif event.type == JOYBUTTONDOWN:
 				print "joybuttondown"
 				
-				 #rotating the pill (if there's room)
-				if (event.button == 1):
-					fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
-					if not isValidPosition(board, fallingPiece):
+				#rotating the pill (if there's room), player 1
+				if event.joy == 0:
+					if (event.button == 1):
+						fallingPiece1['rotation'] = (fallingPiece1['rotation'] + 1) % 4
+						if not isValidPosition(board1, fallingPiece1):
+							fallingPiece1['rotation'] = (fallingPiece1['rotation'] - 1) % 4
+					elif (event.button == 5): #other direction
 						fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
-				elif (event.button == 5): #other direction
-					fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
-					if not isValidPosition(board, fallingPiece):
-						fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
+						if not isValidPosition(board1, fallingPiece1):
+							fallingPiece1['rotation'] = (fallingPiece1['rotation'] + 1) % 4
+
+				#rotating the pill (if there's room), player 2
+				elif event.joy == 1:
+					if (event.button == 1):
+						fallingPiece2['rotation'] = (fallingPiece2['rotation'] + 1) % 4
+						if not isValidPosition(board2, fallingPiece2):
+							fallingPiece2['rotation'] = (fallingPiece2['rotation'] - 1) % 4
+					elif (event.button == 5): #other direction
+						fallingPiece2['rotation'] = (fallingPiece2['rotation'] - 1) % 4
+						if not isValidPosition(board2, fallingPiece2):
+							fallingPiece2['rotation'] = (fallingPiece2['rotation'] + 1) % 4
 				
 			elif event.type == JOYAXISMOTION:
-				# axis stuff
-				if (event.axis == 0) and (event.value == 1) and isValidPosition(board, fallingPiece, adjX=1):
-					fallingPiece['x'] += 1
-					movingRight = True
-				 	movingLeft = False
-				 	lastMoveSidewaysTime = time.time()
-				elif (event.axis == 0) and (event.value == 0):
-					movingLeft = False
-					movingRight = False
-				elif (event.axis == 1) and (event.value == 1):
-					movingDown = True
-					if isValidPosition(board, fallingPiece, adjY=1):
-						fallingPiece['y'] += 1
-					lastMoveDownTime = time.time()
-				elif (event.axis == 1) and (event.value == 0):
-					movingDown = False
-				elif (event.axis == 0) and int(event.value) == -1 and isValidPosition(board, fallingPiece, adjX=-1):
-					fallingPiece['x'] -= 1
-				 	movingLeft = True
-				 	movingRight = False
-				 	lastMoveSidewaysTime = time.time()
+				# axis stuff, player 1
+				if event.joy == 0:
+					if (event.axis == 0) and (event.value == 1) and isValidPosition(board1, fallingPiece1, adjX=1):
+						fallingPiece1['x'] += 1
+						movingRight1 = True
+					 	movingLeft1 = False
+					 	lastMoveSidewaysTime1 = time.time()
+					elif (event.axis == 0) and (event.value == 0):
+						movingLeft1 = False
+						movingRight1 = False
+					elif (event.axis == 1) and (event.value == 1):
+						movingDown1 = True
+						if isValidPosition(board1, fallingPiece1, adjY=1):
+							fallingPiece1['y'] += 1
+						lastMoveDownTime1 = time.time()
+					elif (event.axis == 1) and (event.value == 0):
+						movingDown1 = False
+					elif (event.axis == 0) and int(event.value) == -1 and isValidPosition(board1, fallingPiece1, adjX=-1):
+						fallingPiece1['x'] -= 1
+					 	movingLeft1 = True
+					 	movingRight1 = False
+					 	lastMoveSidewaysTime1 = time.time()
+
+				# axis stuff, player 2
+				if event.joy == 1:
+					if (event.axis == 0) and (event.value == 1) and isValidPosition(board2, fallingPiece2, adjX=1):
+						fallingPiece2['x'] += 1
+						movingRight2 = True
+					 	movingLeft2 = False
+					 	lastMoveSidewaysTime2 = time.time()
+					elif (event.axis == 0) and (event.value == 0):
+						movingLeft2 = False
+						movingRight2 = False
+					elif (event.axis == 1) and (event.value == 1):
+						movingDown2 = True
+						if isValidPosition(board2, fallingPiece2, adjY=1):
+							fallingPiece2['y'] += 1
+						lastMoveDownTime2 = time.time()
+					elif (event.axis == 1) and (event.value == 0):
+						movingDown2 = False
+					elif (event.axis == 0) and int(event.value) == -1 and isValidPosition(board2, fallingPiece2, adjX=-1):
+						fallingPiece2['x'] -= 1
+					 	movingLeft2 = True
+					 	movingRight2 = False
+					 	lastMoveSidewaysTime2 = time.time()
 
 			elif event.type == KEYUP:
 				if (event.key == K_p): # pause game
@@ -213,34 +281,62 @@ def runGame():
 
 					
 
+		#Player 1
+		if (movingLeft1 or movingRight1) and time.time() - lastMoveSidewaysTime1 > MOVESIDEWAYSFREQ:
+			if movingLeft1 and isValidPosition(board1, fallingPiece1, adjX=-1):
+				fallingPiece1['x'] -= 1
+			elif movingRight1 and isValidPosition(board1, fallingPiece1, adjX=1):
+				fallingPiece1['x'] += 1
+			lastMoveSidewaysTime1 = time.time()
 
-		if (movingLeft or movingRight) and time.time() - lastMoveSidewaysTime > MOVESIDEWAYSFREQ:
-			if movingLeft and isValidPosition(board, fallingPiece, adjX=-1):
-				fallingPiece['x'] -= 1
-			elif movingRight and isValidPosition(board, fallingPiece, adjX=1):
-				fallingPiece['x'] += 1
-			lastMoveSidewaysTime = time.time()
-
-		if movingDown and time.time() - lastMoveDownTime > MOVEDOWNFREQ and isValidPosition(board, fallingPiece, adjY=1):
-			fallingPiece['y'] += 1
-			lastMoveDownTime = time.time()
+		if movingDown1 and time.time() - lastMoveDownTime1 > MOVEDOWNFREQ and isValidPosition(board1, fallingPiece1, adjY=1):
+			fallingPiece1['y'] += 1
+			lastMoveDownTime1 = time.time()
 
 		#let the pill fall down on its own
-		if time.time() - lastFallTime > fallFreq:
+		if time.time() - lastFallTime1 > fallFreq1:
 			# see if pill has landed
-			if not isValidPosition(board, fallingPiece, adjY=1):
+			if not isValidPosition(board1, fallingPiece1, adjY=1):
 				# it's landed, add to board
-				addToBoard(board, fallingPiece)
+				addToBoard(board1, fallingPiece1)
 # THIS WAS LAZY, FIX THIS _________________________________***************************************************
-				score += removeCompletes(board)
-				findOrphans(board)
-				score += removeCompletes(board)
-				level, fallFreq = calculateLevelAndFallFreq(score)
-				fallingPiece = None
+				score1 += removeCompletes(board1)
+				findOrphans(board1)
+				score1 += removeCompletes(board1)
+				level1, fallFreq1 = calculateLevelAndFallFreq(score1)
+				fallingPiece1 = None
 			else:
-				fallingPiece['y'] += 1
-				lastFallTime = time.time()
+				fallingPiece1['y'] += 1
+				lastFallTime1 = time.time()
 
+		#Player 2
+		if (movingLeft2 or movingRight2) and time.time() - lastMoveSidewaysTime2 > MOVESIDEWAYSFREQ:
+			if movingLeft2 and isValidPosition(board2, fallingPiece2, adjX=-1):
+				fallingPiece2['x'] -= 1
+			elif movingRight2 and isValidPosition(board2, fallingPiece2, adjX=1):
+				fallingPiece2['x'] += 1
+			lastMoveSidewaysTime2 = time.time()
+
+		if movingDown2 and time.time() - lastMoveDownTime2 > MOVEDOWNFREQ and isValidPosition(board2, fallingPiece2, adjY=1):
+			fallingPiece2['y'] += 1
+			lastMoveDownTime2 = time.time()
+
+		#let the pill fall down on its own
+		if time.time() - lastFallTime2 > fallFreq2:
+			# see if pill has landed
+			if not isValidPosition(board2, fallingPiece2, adjY=1):
+				# it's landed, add to board
+				addToBoard(board2, fallingPiece2)
+# THIS WAS LAZY, FIX THIS _________________________________***************************************************
+				score2 += removeCompletes(board2)
+				findOrphans(board2)
+				score2 += removeCompletes(board2)
+				level2, fallFreq2 = calculateLevelAndFallFreq(score2)
+				fallingPiece2 = None
+			else:
+				fallingPiece2['y'] += 1
+				lastFallTime2 = time.time()
+#----------------------------------------------------------------------------
 		# draw everything on the screen
 		DISPLAYSURF.fill(BGCOLOR)
 		drawBoard(board)
