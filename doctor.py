@@ -13,9 +13,9 @@ from pygame.locals import *
 STARTING_VIRUS_COUNT = 30
 
 FPS = 25
-WINDOWWIDTH = 640
-WINDOWHEIGHT = 480
-BOXSIZE = 20
+WINDOWWIDTH = 1920
+WINDOWHEIGHT = 1080
+BOXSIZE = 40
 BOARDWIDTH = 10
 BOARDHEIGHT = 20
 
@@ -62,11 +62,12 @@ def main():
 	pygame.mixer.pre_init(44100, -16, 2, 512)
 	pygame.init()
 	FPSCLOCK = pygame.time.Clock()
-	DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
-	BASICFONT = pygame.font.Font('fonts/PressStart2P.ttf', 20)
-	BIGVIRUSCOUNTFONT = pygame.font.Font('fonts/PressStart2P.ttf', 70)
-	BIGFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 60)
-	INGAMETITLEFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 30)
+	# DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+	DISPLAYSURF = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+	BASICFONT = pygame.font.Font('fonts/PressStart2P.ttf', 40)
+	BIGVIRUSCOUNTFONT = pygame.font.Font('fonts/PressStart2P.ttf', 140)
+	BIGFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 120)
+	INGAMETITLEFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 60)
 	complete = pygame.mixer.Sound('doctor_music/doctor_sonic.ogg')
 	# MONSTERS = 0
 	pygame.display.set_caption("Fuckin' Dr. Mario")
@@ -594,7 +595,7 @@ def drawBox(boxx, boxy, color, rotation, pill_half, pixelx=None, pixely=None):
 	# 			COLORS[color], 
 	# 			(pixelx + (BOXSIZE/2), pixely + (BOXSIZE/2)),
 	# 			10)
-	pill_right = pygame.image.load('%s.png' % (color,))
+	pill_right = pygame.image.load('%sfs.png' % (color,))
 	pillrect = (pixelx + 1, pixely +1, BOXSIZE, BOXSIZE)
 	if rotation == 0:
 		if pill_half == 'A':
@@ -640,7 +641,7 @@ def drawBoxLanded(boxx, boxy, colorOrient, pixelx=None, pixely=None):
 		pixelx, pixely = convertToPixelCoords(boxx, boxy)
 
 	if colorOrient > 11: #must be a monster
-		monster_pic = pygame.image.load('virus%s.png' % (colorOrient % 3,))
+		monster_pic = pygame.image.load('virus%sfs.png' % (colorOrient % 3,))
 		monster_rect = (pixelx + 1, pixely +1, BOXSIZE, BOXSIZE)
 		DISPLAYSURF.blit(monster_pic, monster_rect)
 		# pygame.draw.circle(DISPLAYSURF, 
@@ -649,7 +650,7 @@ def drawBoxLanded(boxx, boxy, colorOrient, pixelx=None, pixely=None):
 		# 					10)
 
 
-	pill_right = pygame.image.load('%s.png' % (colorOrient % 3,))
+	pill_right = pygame.image.load('%sfs.png' % (colorOrient % 3,))
 	pillrect = (pixelx + 1, pixely +1, BOXSIZE, BOXSIZE)
 	pill_rotation = colorOrient / 3
 	if pill_rotation == 0:
@@ -675,7 +676,7 @@ def drawBoard(board):
 	#fill the background of the board
 	# pygame.draw.rect(DISPLAYSURF, BGCOLOR, (XMARGIN, TOPMARGIN, 
 	# 	BOXSIZE * BOARDWIDTH, BOXSIZE * BOARDHEIGHT))
-	background = pygame.image.load('my_checkerboard.jpg')
+	background = pygame.image.load('fullscreen-oneplayer3.jpg')
 	backgroundRect = background.get_rect()
 	DISPLAYSURF.blit(background, backgroundRect)
 
@@ -691,31 +692,31 @@ def drawStatus(score, level, monsters):
 	#draw the score text
 	scoreSurf = BASICFONT.render('Score: %s' % score, True, TEXTCOLOR)
 	scoreRect = scoreSurf.get_rect()
-	scoreRect.topleft = (WINDOWWIDTH - 190, 80)
+	scoreRect.topleft = (WINDOWWIDTH - 450, 140)
 	DISPLAYSURF.blit(scoreSurf, scoreRect)
 
 	#draw the level text
 	levelSurf = BASICFONT.render('Level: %s' % level, True, TEXTCOLOR)
 	levelRect = levelSurf.get_rect()
-	levelRect.topleft = (WINDOWWIDTH - 190, 110)
+	levelRect.topleft = (WINDOWWIDTH - 450, 200)
 	DISPLAYSURF.blit(levelSurf, levelRect)
 
-	#draw count reamining
+	#draw count remaining
 	virusCountSurf = BIGVIRUSCOUNTFONT.render('%s' % monsters, True, TEXTCOLOR)
 	virusCountRect = virusCountSurf.get_rect()
-	virusCountRect.topleft = (WINDOWWIDTH - 595, 90)
+	virusCountRect.topleft = (270, 150)
 	DISPLAYSURF.blit(virusCountSurf, virusCountRect)
 
 	#draw text below count
 	virusSurf = BASICFONT.render('remaining', True, TEXTCOLOR)
 	virusRect = virusSurf.get_rect()
-	virusRect.topleft = (WINDOWWIDTH - 620, 180)
+	virusRect.topleft = (220, 300)
 	DISPLAYSURF.blit(virusSurf, virusRect)
 
 	#show game name
 	nameSurf = INGAMETITLEFONT.render("Fuckin' Dr. Mario", True, TEXTCOLOR)
 	nameRect = nameSurf.get_rect()
-	nameRect.topleft = (WINDOWWIDTH - 455, 20)
+	nameRect.topleft = (680, 80)
 	DISPLAYSURF.blit(nameSurf, nameRect)
 
 
@@ -739,10 +740,10 @@ def drawNextPiece(piece):
 	# draw the next text
 	nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR)
 	nextRect = nextSurf.get_rect()
-	nextRect.topleft = (WINDOWWIDTH - 155, 180)
+	nextRect.topleft = (WINDOWWIDTH - 400, 280)
 	DISPLAYSURF.blit(nextSurf, nextRect)
 	#draw the next piece
-	drawPiece(piece, pixelx=WINDOWWIDTH-135, pixely=210)
+	drawPiece(piece, pixelx=WINDOWWIDTH-350, pixely=320)
 
 if __name__ == '__main__':
 	main()
