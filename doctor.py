@@ -22,7 +22,9 @@ BOARDHEIGHT = 20
 MOVESIDEWAYSFREQ = 0.15
 MOVEDOWNFREQ = 0.1
 
-XMARGIN = int((WINDOWWIDTH - BOARDWIDTH * BOXSIZE) / 2)
+# XMARGIN = int((WINDOWWIDTH - BOARDWIDTH * BOXSIZE) / 2)
+XMARGIN1 = 450
+XMARGIN2 = 1070
 TOPMARGIN = WINDOWHEIGHT - (BOARDHEIGHT * BOXSIZE) -5
 
 WHITE = (255, 255, 255)
@@ -98,13 +100,13 @@ def runGame():
 	movingLeft1 = False
 	movingRight1 = False
 	score1 = 0
-	level1, fallFreq1 = calculateLevelAndFallFreq(score)
+	level1, fallFreq1 = calculateLevelAndFallFreq(score1)
 
 	fallingPiece1 = getNewPiece()
 	nextPiece1 = getNewPiece()
 
 	# Player 2
-	board2 = getInitialBoard()
+	board2 = board1[:]
 	lastMoveDownTime2 = time.time()
 	lastMoveSidewaysTime2 = time.time()
 	lastFallTime2 = time.time()
@@ -112,7 +114,7 @@ def runGame():
 	movingLeft2 = False
 	movingRight2 = False
 	score2 = 0
-	level2, fallFreq2 = calculateLevelAndFallFreq(score)
+	level2, fallFreq2 = calculateLevelAndFallFreq(score2)
 
 	fallingPiece2 = getNewPiece()
 	nextPiece2 = getNewPiece()
@@ -231,52 +233,52 @@ def runGame():
 					 	movingRight2 = False
 					 	lastMoveSidewaysTime2 = time.time()
 
-			elif event.type == KEYUP:
-				if (event.key == K_p): # pause game
-					DISPLAYSURF.fill(BGCOLOR)
-					pygame.mixer.music.stop()
-					showTextScreen('Paused') #until a key is pressed
-					pygame.mixer.music.play(-1, 0.0)
-					lastFallTime = time.time()
-					lastMoveDownTime = time.time()
-					lastMoveSidewaysTime = time.time()
-				elif (event.key == K_LEFT or event.key == K_a):
-					movingLeft = False
-				elif (event.key == K_RIGHT or event.key == K_d):
-					movingRight = False
-				elif (event.key == K_DOWN or event.key == K_s):
-					movingDown = False
+			# elif event.type == KEYUP:
+			# 	if (event.key == K_p): # pause game
+			# 		DISPLAYSURF.fill(BGCOLOR)
+			# 		pygame.mixer.music.stop()
+			# 		showTextScreen('Paused') #until a key is pressed
+			# 		pygame.mixer.music.play(-1, 0.0)
+			# 		lastFallTime = time.time()
+			# 		lastMoveDownTime = time.time()
+			# 		lastMoveSidewaysTime = time.time()
+			# 	elif (event.key == K_LEFT or event.key == K_a):
+			# 		movingLeft = False
+			# 	elif (event.key == K_RIGHT or event.key == K_d):
+			# 		movingRight = False
+			# 	elif (event.key == K_DOWN or event.key == K_s):
+			# 		movingDown = False
 
-			elif event.type == KEYDOWN:
-				# moving block sideways
-				if (event.key == K_LEFT or event.key == K_a) and \
-					isValidPosition(board, fallingPiece, adjX=-1):
-				 	fallingPiece['x'] -= 1
-				 	movingLeft = True
-				 	movingRight = False
-				 	lastMoveSidewaysTime = time.time()
+			# elif event.type == KEYDOWN:
+			# 	# moving block sideways
+			# 	if (event.key == K_LEFT or event.key == K_a) and \
+			# 		isValidPosition(board, fallingPiece, adjX=-1):
+			# 	 	fallingPiece['x'] -= 1
+			# 	 	movingLeft = True
+			# 	 	movingRight = False
+			# 	 	lastMoveSidewaysTime = time.time()
 
-				elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
-				 	fallingPiece['x'] += 1
-				 	movingRight = True
-				 	movingLeft = False
-				 	lastMoveSidewaysTime = time.time()
+			# 	elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
+			# 	 	fallingPiece['x'] += 1
+			# 	 	movingRight = True
+			# 	 	movingLeft = False
+			# 	 	lastMoveSidewaysTime = time.time()
 
-				 #rotating the pill (if there's room)
-				elif (event.key == K_UP or event.key == K_z):
-					fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
-					if not isValidPosition(board, fallingPiece):
-						fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
-				elif (event.key ==K_x): #other direction
-					fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
-					if not isValidPosition(board, fallingPiece):
-						fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
-				# drop pill faster with down key
-				elif (event.key == K_DOWN or event.key == K_s):
-					movingDown = True
-					if isValidPosition(board, fallingPiece, adjY=1):
-						fallingPiece['y'] += 1
-					lastMoveDownTime = time.time()
+			# 	 #rotating the pill (if there's room)
+			# 	elif (event.key == K_UP or event.key == K_z):
+			# 		fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
+			# 		if not isValidPosition(board, fallingPiece):
+			# 			fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
+			# 	elif (event.key ==K_x): #other direction
+			# 		fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
+			# 		if not isValidPosition(board, fallingPiece):
+			# 			fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
+			# 	# drop pill faster with down key
+			# 	elif (event.key == K_DOWN or event.key == K_s):
+			# 		movingDown = True
+			# 		if isValidPosition(board, fallingPiece, adjY=1):
+			# 			fallingPiece['y'] += 1
+			# 		lastMoveDownTime = time.time()
 
 
 					
@@ -300,9 +302,9 @@ def runGame():
 				# it's landed, add to board
 				addToBoard(board1, fallingPiece1)
 # THIS WAS LAZY, FIX THIS _________________________________***************************************************
-				score1 += removeCompletes(board1)
+				score1 += removeCompletes(board1, 1)
 				findOrphans(board1)
-				score1 += removeCompletes(board1)
+				score1 += removeCompletes(board1, 1)
 				level1, fallFreq1 = calculateLevelAndFallFreq(score1)
 				fallingPiece1 = None
 			else:
@@ -328,9 +330,9 @@ def runGame():
 				# it's landed, add to board
 				addToBoard(board2, fallingPiece2)
 # THIS WAS LAZY, FIX THIS _________________________________***************************************************
-				score2 += removeCompletes(board2)
+				score2 += removeCompletes(board2, 2)
 				findOrphans(board2)
-				score2 += removeCompletes(board2)
+				score2 += removeCompletes(board2, 2)
 				level2, fallFreq2 = calculateLevelAndFallFreq(score2)
 				fallingPiece2 = None
 			else:
@@ -339,11 +341,17 @@ def runGame():
 #----------------------------------------------------------------------------
 		# draw everything on the screen
 		DISPLAYSURF.fill(BGCOLOR)
-		drawBoard(board)
-		drawStatus(score, level, MONSTERS)
-		drawNextPiece(nextPiece)
-		if fallingPiece != None:
-			drawPiece(fallingPiece)
+		drawBoard(board1, 1)
+		drawBoard(board2, 2)
+		drawStatus(score1, level1, MONSTERS1, 1)
+		drawStatus(score2, level2, MONSTERS2, 2)
+		drawNextPiece(nextPiece1, 1)
+		drawNextPiece(nextPiece2, 2)
+		if fallingPiece1 != None:
+			drawPiece(fallingPiece1, 1)
+
+		if fallingPiece2 != None:
+			drawPiece(fallingPiece2, 2)
 
 		pygame.display.update()
 		FPSCLOCK.tick(FPS)
@@ -454,6 +462,10 @@ def getInitialBoard():
 			else:
 				column.append(BLANK)
 		board.append(column)
+	global MONSTERS1
+	MONSTERS1 = MONSTERS
+	global MONSTERS2
+	MONSTERS2 = MONSTERS
 	return board
 
 def isOnBoard(x, y):
@@ -472,84 +484,166 @@ def isValidPosition(board, piece, adjX=0, adjY=0):
 				return False
 	return True
 
-def isCompleteSetHoriz(board, y):
-	global MONSTERS
-	count = 0
-	monster_count = 0
-	last_color = -1
-	for x in range(BOARDWIDTH):
-		if board[x][y] != BLANK:
-			this_color = board[x][y] % 3
-			if (this_color == last_color) or (last_color == -1):
-				last_color = this_color
-				count += 1
-				if board[x][y] > 11:
-					monster_count += 1
+def isCompleteSetHoriz(board, y, board_number):
+	if board_number == 1:
+		global MONSTERS1
+		count = 0
+		monster_count = 0
+		last_color = -1
+		for x in range(BOARDWIDTH):
+			if board[x][y] != BLANK:
+				this_color = board[x][y] % 3
+				if (this_color == last_color) or (last_color == -1):
+					last_color = this_color
+					count += 1
+					if board[x][y] > 11:
+						monster_count += 1
+				else:
+					if count >= 4:
+						complete.play()
+						MONSTERS1 = MONSTERS1 - monster_count
+						return x-1, count
+					else:
+						last_color = this_color
+						count = 1
+						if board[x][y] > 11:
+							monster_count = 1
+						else:
+							monster_count = 0
 			else:
 				if count >= 4:
 					complete.play()
-					MONSTERS = MONSTERS - monster_count
+					MONSTERS1 = MONSTERS1 - monster_count
 					return x-1, count
 				else:
+					count = 0
+					monster_count = 0
+			if x == (BOARDWIDTH - 1):
+				if count >= 4:
+					complete.play()
+					MONSTERS1 = MONSTERS1 - monster_count
+					return x, count
+	elif board_number == 2:
+		global MONSTERS2
+		count = 0
+		monster_count = 0
+		last_color = -1
+		for x in range(BOARDWIDTH):
+			if board[x][y] != BLANK:
+				this_color = board[x][y] % 3
+				if (this_color == last_color) or (last_color == -1):
 					last_color = this_color
-					count = 1
+					count += 1
 					if board[x][y] > 11:
-						monster_count = 1
+						monster_count += 1
+				else:
+					if count >= 4:
+						complete.play()
+						MONSTERS2 = MONSTERS2 - monster_count
+						return x-1, count
 					else:
-						monster_count = 0
-		else:
-			if count >= 4:
-				complete.play()
-				MONSTERS = MONSTERS - monster_count
-				return x-1, count
-			else:
-				count = 0
-				monster_count = 0
-		if x == (BOARDWIDTH - 1):
-			if count >= 4:
-				complete.play()
-				MONSTERS = MONSTERS - monster_count
-				return x, count
-	return False
-
-def isCompleteSetVert(board, x):
-	global MONSTERS
-	count = 0
-	monster_count = 0
-	last_color = -1
-	for y in range(BOARDHEIGHT):
-		if board[x][y] != BLANK:
-			this_color = board[x][y] % 3
-			if (this_color == last_color) or (last_color == -1):
-				last_color = this_color
-				count += 1
-				if board[x][y] > 11:
-					monster_count += 1
+						last_color = this_color
+						count = 1
+						if board[x][y] > 11:
+							monster_count = 1
+						else:
+							monster_count = 0
 			else:
 				if count >= 4:
 					complete.play()
-					MONSTERS = MONSTERS - monster_count
+					MONSTERS2 = MONSTERS2 - monster_count
+					return x-1, count
+				else:
+					count = 0
+					monster_count = 0
+			if x == (BOARDWIDTH - 1):
+				if count >= 4:
+					complete.play()
+					MONSTERS2 = MONSTERS2 - monster_count
+					return x, count
+	return False
+
+def isCompleteSetVert(board, x, board_number):
+	if board_number == 1:
+		global MONSTERS1
+	
+		count = 0
+		monster_count = 0
+		last_color = -1
+		for y in range(BOARDHEIGHT):
+			if board[x][y] != BLANK:
+				this_color = board[x][y] % 3
+				if (this_color == last_color) or (last_color == -1):
+					last_color = this_color
+					count += 1
+					if board[x][y] > 11:
+						monster_count += 1
+				else:
+					if count >= 4:
+						complete.play()
+						MONSTERS1 = MONSTERS1 - monster_count
+						return y-1, count
+					else:
+						last_color = this_color
+						count = 1
+						if board[x][y] > 11:
+							monster_count = 1
+						else:
+							monster_count = 0
+			else:
+				if count >= 4:
+					complete.play()
+					MONSTERS1 = MONSTERS1 - monster_count
 					return y-1, count
 				else:
+					count = 0
+					monster_count = 0
+			if y == (BOARDHEIGHT - 1):
+				if count >= 4:
+					complete.play()
+					MONSTERS1 = MONSTERS1 - monster_count
+					return y, count
+	elif board_number == 2:
+		global MONSTERS2
+		count = 0
+		monster_count = 0
+		last_color = -1
+		for y in range(BOARDHEIGHT):
+			if board[x][y] != BLANK:
+				this_color = board[x][y] % 3
+				if (this_color == last_color) or (last_color == -1):
 					last_color = this_color
-					count = 1
+					count += 1
 					if board[x][y] > 11:
-						monster_count = 1
+						monster_count += 1
+				else:
+					if count >= 4:
+						complete.play()
+						MONSTERS2 = MONSTERS2 - monster_count
+						return y-1, count
 					else:
-						monster_count = 0
-		else:
-			if count >= 4:
-				complete.play()
-				MONSTERS = MONSTERS - monster_count
-				return y-1, count
+						last_color = this_color
+						count = 1
+						if board[x][y] > 11:
+							monster_count = 1
+						else:
+							monster_count = 0
 			else:
-				count = 0
-				monster_count = 0
-		if y == (BOARDHEIGHT - 1):
-			if count >= 4:
-				complete.play()
-				MONSTERS = MONSTERS - monster_count
-				return y, count
+				if count >= 4:
+					complete.play()
+					MONSTERS2 = MONSTERS2 - monster_count
+					return y-1, count
+				else:
+					count = 0
+					monster_count = 0
+			if y == (BOARDHEIGHT - 1):
+				if count >= 4:
+					complete.play()
+					MONSTERS2 = MONSTERS2 - monster_count
+					return y, count
+
+
+
 	return False
 
 def shiftRemainingYHoriz(board, x, count, y):
@@ -648,35 +742,41 @@ def findOrphans(board):
 
 
 
-def removeCompletes(board):
+def removeCompletes(board, board_number):
 	y = BOARDHEIGHT - 1 #start at bottom of board
 	while y >= 0:
-		setLocation = isCompleteSetHoriz(board, y)
+		setLocation = isCompleteSetHoriz(board, y, board_number)
 		if setLocation:
 			shiftRemainingYHoriz(board, setLocation[0], setLocation[1], y)
 		else:
 			y -= 1
 	x = BOARDWIDTH - 1
 	while x >= 0:
-		setLocation = isCompleteSetVert(board, x)
+		setLocation = isCompleteSetVert(board, x, board_number)
 		if setLocation:
 			shiftRemainingXVert(board, x, setLocation[0], setLocation[1])
 		else:
 			x -= 1
 	return 1
 
-def convertToPixelCoords(boxx, boxy):
+def convertToPixelCoords(boxx, boxy, board_number):
 	# convert the given xy coordinates of the board to xy 
 	#coords of the location on screen
-	return (XMARGIN + (boxx * BOXSIZE)), (TOPMARGIN + (boxy * BOXSIZE))
+	if board_number == 1:
+		return (XMARGIN1 + (boxx * BOXSIZE)), (TOPMARGIN + (boxy * BOXSIZE))
+	elif board_number == 2:
+		return (XMARGIN2 + (boxx * BOXSIZE)), (TOPMARGIN + (boxy * BOXSIZE))
 
-def drawBox(boxx, boxy, color, rotation, pill_half, pixelx=None, pixely=None):
+def drawBox(boxx, boxy, color, rotation, pill_half, board_number, pixelx=None, pixely=None):
 	#draw a single box at xy coordinates at the board. or if pixelx/pixely 
 	#specified, draw to the pixel coords stored there (for next piece)
 	if color == BLANK:
 		return
+	if pixelx:
+		if board_number == 2:
+			pixelx += 1070
 	if pixelx == None and pixely == None:
-		pixelx, pixely = convertToPixelCoords(boxx, boxy)
+		pixelx, pixely = convertToPixelCoords(boxx, boxy, board_number)
 	# pygame.draw.rect(DISPLAYSURF, COLORS[color], (pixelx + 1, pixely +1, 
 	# 				BOXSIZE - 1, BOXSIZE - 1))
 	# pygame.draw.rect(DISPLAYSURF, LIGHTCOLORS[color], (pixelx + 1, pixely + 1, 
@@ -730,11 +830,14 @@ def drawBox(boxx, boxy, color, rotation, pill_half, pixelx=None, pixely=None):
 	# 			30,
 	# 			120)
 
-def drawBoxLanded(boxx, boxy, colorOrient, pixelx=None, pixely=None):
+def drawBoxLanded(boxx, boxy, colorOrient, board_number, pixelx=None, pixely=None):
 	if colorOrient == BLANK:
 		return
+	if pixelx:
+		if board_number == 2:
+			pixelx += 1070
 	if pixelx == None and pixely == None:
-		pixelx, pixely = convertToPixelCoords(boxx, boxy)
+		pixelx, pixely = convertToPixelCoords(boxx, boxy, board_number)
 
 	if colorOrient > 11: #must be a monster
 		monster_pic = pygame.image.load('virus%sfs.png' % (colorOrient % 3,))
@@ -764,7 +867,7 @@ def drawBoxLanded(boxx, boxy, colorOrient, pixelx=None, pixely=None):
 		DISPLAYSURF.blit(pill_bottom_flipped, pillrect)
 
 
-def drawBoard(board):
+def drawBoard(board, board_number):
 	# draw the border around the board
 	# pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (XMARGIN - 3, TOPMARGIN - 7, 
 	# 	(BOARDWIDTH * BOXSIZE) + 8, (BOARDHEIGHT * BOXSIZE) + 8), 5)
@@ -772,7 +875,7 @@ def drawBoard(board):
 	#fill the background of the board
 	# pygame.draw.rect(DISPLAYSURF, BGCOLOR, (XMARGIN, TOPMARGIN, 
 	# 	BOXSIZE * BOARDWIDTH, BOXSIZE * BOARDHEIGHT))
-	background = pygame.image.load('fullscreen-oneplayer3.jpg')
+	background = pygame.image.load('fullscreen-twoplayer.jpg')
 	backgroundRect = background.get_rect()
 	DISPLAYSURF.blit(background, backgroundRect)
 
@@ -780,34 +883,61 @@ def drawBoard(board):
 	for x in range(BOARDWIDTH):
 		for y in range(BOARDHEIGHT):
 			if isinstance(board[x][y], int):
-				drawBoxLanded(x, y, board[x][y])
+				drawBoxLanded(x, y, board[x][y], board_number)
 			else:
-				drawBox(x, y, board[x][y], 0, 'A')
+				drawBox(x, y, board[x][y], 0, 'A', board_number)
 
-def drawStatus(score, level, monsters):
-	#draw the score text
-	scoreSurf = BASICFONT.render('Score: %s' % score, True, TEXTCOLOR)
-	scoreRect = scoreSurf.get_rect()
-	scoreRect.topleft = (WINDOWWIDTH - 450, 140)
-	DISPLAYSURF.blit(scoreSurf, scoreRect)
+def drawStatus(score, level, monsters, board_number):
+	# Player 1
+	if board_number == 1:
+		#draw the score text
+		scoreSurf = BASICFONT.render('Score: %s' % score, True, TEXTCOLOR)
+		scoreRect = scoreSurf.get_rect()
+		scoreRect.topleft = (150, 140)
+		DISPLAYSURF.blit(scoreSurf, scoreRect)
 
-	#draw the level text
-	levelSurf = BASICFONT.render('Level: %s' % level, True, TEXTCOLOR)
-	levelRect = levelSurf.get_rect()
-	levelRect.topleft = (WINDOWWIDTH - 450, 200)
-	DISPLAYSURF.blit(levelSurf, levelRect)
+		#draw the level text
+		levelSurf = BASICFONT.render('Level: %s' % level, True, TEXTCOLOR)
+		levelRect = levelSurf.get_rect()
+		levelRect.topleft = (150, 200)
+		DISPLAYSURF.blit(levelSurf, levelRect)
 
-	#draw count remaining
-	virusCountSurf = BIGVIRUSCOUNTFONT.render('%s' % monsters, True, TEXTCOLOR)
-	virusCountRect = virusCountSurf.get_rect()
-	virusCountRect.topleft = (270, 150)
-	DISPLAYSURF.blit(virusCountSurf, virusCountRect)
+		#draw count remaining
+		virusCountSurf = BIGVIRUSCOUNTFONT.render('%s' % monsters, True, TEXTCOLOR)
+		virusCountRect = virusCountSurf.get_rect()
+		virusCountRect.topleft = (120, 650)
+		DISPLAYSURF.blit(virusCountSurf, virusCountRect)
 
-	#draw text below count
-	virusSurf = BASICFONT.render('remaining', True, TEXTCOLOR)
-	virusRect = virusSurf.get_rect()
-	virusRect.topleft = (220, 300)
-	DISPLAYSURF.blit(virusSurf, virusRect)
+		#draw text below count
+		virusSurf = BASICFONT.render('remaining', True, TEXTCOLOR)
+		virusRect = virusSurf.get_rect()
+		virusRect.topleft = (70, 800)
+		DISPLAYSURF.blit(virusSurf, virusRect)
+
+	elif board_number == 2:
+		#draw the score text
+		scoreSurf = BASICFONT.render('Score: %s' % score, True, TEXTCOLOR)
+		scoreRect = scoreSurf.get_rect()
+		scoreRect.topleft = (WINDOWWIDTH - 350, 140)
+		DISPLAYSURF.blit(scoreSurf, scoreRect)
+
+		#draw the level text
+		levelSurf = BASICFONT.render('Level: %s' % level, True, TEXTCOLOR)
+		levelRect = levelSurf.get_rect()
+		levelRect.topleft = (WINDOWWIDTH - 350, 200)
+		DISPLAYSURF.blit(levelSurf, levelRect)
+
+		#draw count remaining
+		virusCountSurf = BIGVIRUSCOUNTFONT.render('%s' % monsters, True, TEXTCOLOR)
+		virusCountRect = virusCountSurf.get_rect()
+		virusCountRect.topleft = (WINDOWWIDTH - 370, 650)
+		DISPLAYSURF.blit(virusCountSurf, virusCountRect)
+
+		#draw text below count
+		virusSurf = BASICFONT.render('remaining', True, TEXTCOLOR)
+		virusRect = virusSurf.get_rect()
+		virusRect.topleft = (WINDOWWIDTH - 390, 800)
+		DISPLAYSURF.blit(virusSurf, virusRect)
 
 	#show game name
 	nameSurf = INGAMETITLEFONT.render("Fuckin' Dr. Mario", True, TEXTCOLOR)
@@ -816,30 +946,41 @@ def drawStatus(score, level, monsters):
 	DISPLAYSURF.blit(nameSurf, nameRect)
 
 
-def drawPiece(piece, pixelx=None, pixely=None):
+def drawPiece(piece, board_number, pixelx=None, pixely=None):
 	shapeToDraw = ORIENTATION[piece['rotation']]
 	if pixelx == None and pixely == None:
 		#if pixelx and y hasn't bee specified, use location 
 		#stored in piece data structure
-		pixelx, pixely = convertToPixelCoords(piece['x'], piece['y'])
+		pixelx, pixely = convertToPixelCoords(piece['x'], piece['y'], 1) # drawBox already handles the player 2, so this is always 1
 	#draw each block that make up the pill
 	for x in range(TEMPLATEWIDTH):
 		for y in range(TEMPLATEHEIGHT):
 			if shapeToDraw[y][x] == 'A':
-				drawBox(None, None, piece['A'], piece['rotation'], 'A', pixelx + (x * BOXSIZE), 
+				drawBox(None, None, piece['A'], piece['rotation'], 'A', board_number, pixelx + (x * BOXSIZE), 
 						pixely + (y * BOXSIZE))
 			elif shapeToDraw[y][x] == 'B':
-				drawBox(None, None, piece['B'], piece['rotation'], 'B', pixelx + (x * BOXSIZE), 
+				drawBox(None, None, piece['B'], piece['rotation'], 'B', board_number, pixelx + (x * BOXSIZE), 
 						pixely + (y * BOXSIZE))
 
-def drawNextPiece(piece):
-	# draw the next text
-	nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR)
-	nextRect = nextSurf.get_rect()
-	nextRect.topleft = (WINDOWWIDTH - 400, 280)
-	DISPLAYSURF.blit(nextSurf, nextRect)
-	#draw the next piece
-	drawPiece(piece, pixelx=WINDOWWIDTH-350, pixely=320)
+def drawNextPiece(piece, board_number):
+	# Player 1
+	if board_number == 1:
+		# draw the next text
+		nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR)
+		nextRect = nextSurf.get_rect()
+		nextRect.topleft = (200, 280)
+		DISPLAYSURF.blit(nextSurf, nextRect)
+		#draw the next piece
+		drawPiece(piece, 1, pixelx=250, pixely=320)
+	# Player 2
+	elif board_number == 2:
+		# draw the next text
+		nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR)
+		nextRect = nextSurf.get_rect()
+		nextRect.topleft = (WINDOWWIDTH - 300, 280)
+		DISPLAYSURF.blit(nextSurf, nextRect)
+		#draw the next piece
+		drawPiece(piece, 2, pixelx=WINDOWWIDTH - 250, pixely=320)
 
 if __name__ == '__main__':
 	main()
