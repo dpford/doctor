@@ -977,7 +977,7 @@ def drawNextPiece(piece, board_number):
 		nextRect.topleft = (200, 280)
 		DISPLAYSURF.blit(nextSurf, nextRect)
 		#draw the next piece
-		drawPiece(piece, 1, pixelx=250, pixely=320)
+		drawPiece(piece, 1, pixelx=230, pixely=320)
 	# Player 2
 	elif board_number == 2:
 		# draw the next text
@@ -986,7 +986,7 @@ def drawNextPiece(piece, board_number):
 		nextRect.topleft = (WINDOWWIDTH - 300, 280)
 		DISPLAYSURF.blit(nextSurf, nextRect)
 		#draw the next piece
-		drawPiece(piece, 2, pixelx=WINDOWWIDTH - 250, pixely=320)
+		drawPiece(piece, 2, pixelx=580, pixely=320)
 
 if __name__ == '__main__':
 	main()
