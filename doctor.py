@@ -772,9 +772,11 @@ def drawBox(boxx, boxy, color, rotation, pill_half, board_number, pixelx=None, p
 	#specified, draw to the pixel coords stored there (for next piece)
 	if color == BLANK:
 		return
-	if pixelx:
+	if pixelx != None:
 		if board_number == 2:
 			pixelx += 1070
+	else:
+		print 'blah'
 	if pixelx == None and pixely == None:
 		pixelx, pixely = convertToPixelCoords(boxx, boxy, board_number)
 	# pygame.draw.rect(DISPLAYSURF, COLORS[color], (pixelx + 1, pixely +1, 
@@ -835,7 +837,10 @@ def drawBoxLanded(boxx, boxy, colorOrient, board_number, pixelx=None, pixely=Non
 		return
 	if pixelx:
 		if board_number == 2:
+			print 'hi'
 			pixelx += 1070
+		else:
+			print 'one'
 	if pixelx == None and pixely == None:
 		pixelx, pixely = convertToPixelCoords(boxx, boxy, board_number)
 
@@ -875,9 +880,10 @@ def drawBoard(board, board_number):
 	#fill the background of the board
 	# pygame.draw.rect(DISPLAYSURF, BGCOLOR, (XMARGIN, TOPMARGIN, 
 	# 	BOXSIZE * BOARDWIDTH, BOXSIZE * BOARDHEIGHT))
-	background = pygame.image.load('fullscreen-twoplayer.jpg')
-	backgroundRect = background.get_rect()
-	DISPLAYSURF.blit(background, backgroundRect)
+	if board_number == 1:
+		background = pygame.image.load('fullscreen-twoplayer.jpg')
+		backgroundRect = background.get_rect()
+		DISPLAYSURF.blit(background, backgroundRect)
 
 	#draw the individual boxes on the board
 	for x in range(BOARDWIDTH):
