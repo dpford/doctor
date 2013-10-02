@@ -349,6 +349,8 @@ def runGame():
 		drawNextPiece(nextPiece2, 2)
 		if fallingPiece1 != None:
 			drawPiece(fallingPiece1, 1)
+		print "one is %s" % (fallingPiece1,)
+		print "two is %s" % (fallingPiece2,)
 
 		if fallingPiece2 != None:
 			drawPiece(fallingPiece2, 2)
@@ -772,9 +774,9 @@ def drawBox(boxx, boxy, color, rotation, pill_half, board_number, pixelx=None, p
 	#specified, draw to the pixel coords stored there (for next piece)
 	if color == BLANK:
 		return
-	if pixelx != None:
-		if board_number == 2:
-			pixelx += 1070
+	# if pixelx != None:
+	# 	if board_number == 2:
+	# 		pixelx += 1070
 	else:
 		print 'blah'
 	if pixelx == None and pixely == None:
@@ -833,6 +835,7 @@ def drawBox(boxx, boxy, color, rotation, pill_half, board_number, pixelx=None, p
 	# 			120)
 
 def drawBoxLanded(boxx, boxy, colorOrient, board_number, pixelx=None, pixely=None):
+	# print 'landed box with boxx %s, boxy %s, colorOrient %s, board_number %s, pixelx %s, pixely %s' % (boxx, boxy, colorOrient, board_number, pixelx, pixely)
 	if colorOrient == BLANK:
 		return
 	if pixelx:
@@ -843,6 +846,8 @@ def drawBoxLanded(boxx, boxy, colorOrient, board_number, pixelx=None, pixely=Non
 			print 'one'
 	if pixelx == None and pixely == None:
 		pixelx, pixely = convertToPixelCoords(boxx, boxy, board_number)
+	if colorOrient < 90:
+		print 'board %s, pixelx is %s, pixely is %s' % (board_number, pixelx, pixely)
 
 	if colorOrient > 11: #must be a monster
 		monster_pic = pygame.image.load('virus%sfs.png' % (colorOrient % 3,))
@@ -957,7 +962,7 @@ def drawPiece(piece, board_number, pixelx=None, pixely=None):
 	if pixelx == None and pixely == None:
 		#if pixelx and y hasn't bee specified, use location 
 		#stored in piece data structure
-		pixelx, pixely = convertToPixelCoords(piece['x'], piece['y'], 1) # drawBox already handles the player 2, so this is always 1
+		pixelx, pixely = convertToPixelCoords(piece['x'], piece['y'], board_number) # drawBox already handles the player 2, so this is always 1
 	#draw each block that make up the pill
 	for x in range(TEMPLATEWIDTH):
 		for y in range(TEMPLATEHEIGHT):
@@ -986,7 +991,7 @@ def drawNextPiece(piece, board_number):
 		nextRect.topleft = (WINDOWWIDTH - 300, 280)
 		DISPLAYSURF.blit(nextSurf, nextRect)
 		#draw the next piece
-		drawPiece(piece, 2, pixelx=580, pixely=320)
+		drawPiece(piece, 2, pixelx=WINDOWWIDTH-260, pixely=320)
 
 if __name__ == '__main__':
 	main()
