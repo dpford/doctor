@@ -11,7 +11,7 @@ import copy
 
 from pygame.locals import *
 
-STARTING_VIRUS_COUNT = 30
+STARTING_VIRUS_COUNT = 15
 
 FPS = 25
 WINDOWWIDTH = 1920
