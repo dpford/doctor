@@ -7,6 +7,7 @@ import time
 import pygame
 import sys
 import math
+import copy
 
 from pygame.locals import *
 
@@ -93,6 +94,7 @@ def main():
 def runGame():
 	# Player 1
 	board1 = getInitialBoard()
+	print id(board1)
 	lastMoveDownTime1 = time.time()
 	lastMoveSidewaysTime1 = time.time()
 	lastFallTime1 = time.time()
@@ -106,7 +108,12 @@ def runGame():
 	nextPiece1 = getNewPiece()
 
 	# Player 2
-	board2 = board1[:]
+	# board2 = board1[:]
+	# board2 = list(board1)
+	# board2 = getInitialBoard()
+	board2 = copy.deepcopy(board1)
+	print id(board2)
+	
 	lastMoveDownTime2 = time.time()
 	lastMoveSidewaysTime2 = time.time()
 	lastFallTime2 = time.time()
@@ -129,7 +136,7 @@ def runGame():
 			lastFallTime1 = time.time() #reset lastFallTime
 
 			if not isValidPosition(board1, fallingPiece1):
-				return 'Game Over'# can't find a new pill, so you lose!
+				return 'Player 2 Wins!'# can't find a new pill, so you lose!
 		#Player 2
 		if fallingPiece2 == None:
 			# No falling pill in play, so put one at the top
@@ -138,7 +145,7 @@ def runGame():
 			lastFallTime2 = time.time() #reset lastFallTime
 
 			if not isValidPosition(board2, fallingPiece2):
-				return 'Game Over'# can't find a new pill, so you lose!
+				return 'Player 1 Wins!'# can't find a new pill, so you lose!
 
 		checkForQuit()
 		if MONSTERS1 == 0:
@@ -147,9 +154,7 @@ def runGame():
 			return 'Player 2 Wins!'
 		for event in pygame.event.get(): #event handling loop
 			if event.type == JOYBUTTONUP:
-				print "joybuttonup"
 				if (event.button == 3): # pause game
-					print "thinks its pausing"
 					DISPLAYSURF.fill(BGCOLOR)
 					pygame.mixer.music.stop()
 					showTextScreen('Paused') #until a key is pressed
@@ -162,7 +167,6 @@ def runGame():
 					lastMoveSidewaysTime2 = time.time()			
 
 			elif event.type == JOYBUTTONDOWN:
-				print "joybuttondown"
 				
 				#rotating the pill (if there's room), player 1
 				if event.joy == 0:
@@ -349,8 +353,6 @@ def runGame():
 		drawNextPiece(nextPiece2, 2)
 		if fallingPiece1 != None:
 			drawPiece(fallingPiece1, 1)
-		print "one is %s" % (fallingPiece1,)
-		print "two is %s" % (fallingPiece2,)
 
 		if fallingPiece2 != None:
 			drawPiece(fallingPiece2, 2)
@@ -777,8 +779,6 @@ def drawBox(boxx, boxy, color, rotation, pill_half, board_number, pixelx=None, p
 	# if pixelx != None:
 	# 	if board_number == 2:
 	# 		pixelx += 1070
-	else:
-		print 'blah'
 	if pixelx == None and pixely == None:
 		pixelx, pixely = convertToPixelCoords(boxx, boxy, board_number)
 	# pygame.draw.rect(DISPLAYSURF, COLORS[color], (pixelx + 1, pixely +1, 
@@ -846,8 +846,6 @@ def drawBoxLanded(boxx, boxy, colorOrient, board_number, pixelx=None, pixely=Non
 			print 'one'
 	if pixelx == None and pixely == None:
 		pixelx, pixely = convertToPixelCoords(boxx, boxy, board_number)
-	if colorOrient < 90:
-		print 'board %s, pixelx is %s, pixely is %s' % (board_number, pixelx, pixely)
 
 	if colorOrient > 11: #must be a monster
 		monster_pic = pygame.image.load('virus%sfs.png' % (colorOrient % 3,))
@@ -895,6 +893,8 @@ def drawBoard(board, board_number):
 		for y in range(BOARDHEIGHT):
 			if isinstance(board[x][y], int):
 				drawBoxLanded(x, y, board[x][y], board_number)
+				# if board[x][y] < 90:
+				# 	print board[x][y], board_number
 			else:
 				drawBox(x, y, board[x][y], 0, 'A', board_number)
 
