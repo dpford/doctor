@@ -94,7 +94,6 @@ def main():
 def runGame():
 	# Player 1
 	board1 = getInitialBoard()
-	print id(board1)
 	lastMoveDownTime1 = time.time()
 	lastMoveSidewaysTime1 = time.time()
 	lastFallTime1 = time.time()
@@ -112,8 +111,6 @@ def runGame():
 	# board2 = list(board1)
 	# board2 = getInitialBoard()
 	board2 = copy.deepcopy(board1)
-	print id(board2)
-	
 	lastMoveDownTime2 = time.time()
 	lastMoveSidewaysTime2 = time.time()
 	lastFallTime2 = time.time()
@@ -175,7 +172,7 @@ def runGame():
 						if not isValidPosition(board1, fallingPiece1):
 							fallingPiece1['rotation'] = (fallingPiece1['rotation'] - 1) % 4
 					elif (event.button == 5): #other direction
-						fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
+						fallingPiece1['rotation'] = (fallingPiece1['rotation'] - 1) % 4
 						if not isValidPosition(board1, fallingPiece1):
 							fallingPiece1['rotation'] = (fallingPiece1['rotation'] + 1) % 4
 
