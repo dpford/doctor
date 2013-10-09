@@ -77,15 +77,18 @@ def main():
 	else:
 		pygame.joystick.Joystick(0).init()
 
+	songs = ['doctor_music/doctor_fever_guitar.ogg', 'doctor_music/cold-ruins.ogg']
+	song_to_play = songs[random.randint(0,1)]
+
 	showTextScreen("Fuckin' Dr. Mario")
 	while True: #game loop
-		pygame.mixer.music.load('doctor_music/doctor_fever_guitar.ogg')
+		pygame.mixer.music.load(song_to_play)
 		pygame.mixer.music.play(-1, 0.0)
 		message = runGame()
 		pygame.mixer.music.fadeout(1000)
-		showTextScreen('%s' % (message,))
 		pygame.mixer.music.load('doctor_music/08_-_Dr._Mario_-_NES_-_VS_Game_Over.ogg')
 		pygame.mixer.music.play(-1, 0.0)
+		showTextScreen('%s' % (message,))
 
 def runGame():
 	board = getInitialBoard()
@@ -574,7 +577,7 @@ def convertToPixelCoords(boxx, boxy):
 	#coords of the location on screen
 	return (XMARGIN + (boxx * BOXSIZE)), (TOPMARGIN + (boxy * BOXSIZE))
 
-def drawBox(boxx, boxy, color, rotation, pill_half, pixelx=None, pixely=None):
+def drawBox(boxx, boxy, color, rotation, pill_half, pixelx=None, pixely=None, next_piece=False):
 	#draw a single box at xy coordinates at the board. or if pixelx/pixely 
 	#specified, draw to the pixel coords stored there (for next piece)
 	if color == BLANK:
@@ -598,12 +601,23 @@ def drawBox(boxx, boxy, color, rotation, pill_half, pixelx=None, pixely=None):
 	pill_right = pygame.image.load('%sfs.png' % (color,))
 	pillrect = (pixelx + 1, pixely +1, BOXSIZE, BOXSIZE)
 	if rotation == 0:
-		if pill_half == 'A':
-			pill_left = pygame.transform.rotate(pill_right, 180)
-			pill_left_flipped = pygame.transform.flip(pill_left, False, True)
-			DISPLAYSURF.blit(pill_left_flipped, pillrect)
+		if next_piece:
+			pillrect = (pixelx + 1, pixely + 1, BOXSIZE*2, BOXSIZE*2)
+			if pill_half == 'A':
+				pill_left = pygame.transform.rotozoom(pill_right, 180, 2)
+				pill_left_flipped = pygame.transform.flip(pill_left, False, True)
+				DISPLAYSURF.blit(pill_left_flipped, pillrect)
+			else:
+				pill_right2 = pygame.transform.scale2x(pill_right)
+				DISPLAYSURF.blit(pill_right2, pillrect)
+
 		else:
-			DISPLAYSURF.blit(pill_right, pillrect)
+			if pill_half == 'A':
+				pill_left = pygame.transform.rotate(pill_right, 180)
+				pill_left_flipped = pygame.transform.flip(pill_left, False, True)
+				DISPLAYSURF.blit(pill_left_flipped, pillrect)
+			else:
+				DISPLAYSURF.blit(pill_right, pillrect)
 	elif rotation == 1:
 		if pill_half == 'A':
 			pill_bottom = pygame.transform.rotate(pill_right, 270)
@@ -720,7 +734,7 @@ def drawStatus(score, level, monsters):
 	DISPLAYSURF.blit(nameSurf, nameRect)
 
 
-def drawPiece(piece, pixelx=None, pixely=None):
+def drawPiece(piece, pixelx=None, pixely=None, next_piece=False):
 	shapeToDraw = ORIENTATION[piece['rotation']]
 	if pixelx == None and pixely == None:
 		#if pixelx and y hasn't bee specified, use location 
@@ -730,20 +744,34 @@ def drawPiece(piece, pixelx=None, pixely=None):
 	for x in range(TEMPLATEWIDTH):
 		for y in range(TEMPLATEHEIGHT):
 			if shapeToDraw[y][x] == 'A':
-				drawBox(None, None, piece['A'], piece['rotation'], 'A', pixelx + (x * BOXSIZE), 
-						pixely + (y * BOXSIZE))
+				if not next_piece:
+					drawBox(None, None, piece['A'], piece['rotation'], 'A', pixelx + (x * BOXSIZE), 
+							pixely + (y * BOXSIZE), next_piece=next_piece)
+				else:
+					drawBox(None, None, piece['A'], piece['rotation'], 'A', pixelx + (x * BOXSIZE*2), 
+							pixely + (y * BOXSIZE*2), next_piece=next_piece)
 			elif shapeToDraw[y][x] == 'B':
-				drawBox(None, None, piece['B'], piece['rotation'], 'B', pixelx + (x * BOXSIZE), 
-						pixely + (y * BOXSIZE))
+				if not next_piece:
+					drawBox(None, None, piece['B'], piece['rotation'], 'B', pixelx + (x * BOXSIZE), 
+							pixely + (y * BOXSIZE), next_piece=next_piece)
+				else:
+					drawBox(None, None, piece['B'], piece['rotation'], 'B', pixelx + (x * BOXSIZE*2), 
+							pixely + (y * BOXSIZE*2), next_piece=next_piece)
 
 def drawNextPiece(piece):
+	px = 1540
+	py = 290
 	# draw the next text
 	nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR)
 	nextRect = nextSurf.get_rect()
 	nextRect.topleft = (WINDOWWIDTH - 400, 280)
 	DISPLAYSURF.blit(nextSurf, nextRect)
+	#draw the box behind piece
+	boxrect = (px-7, py+70, (BOXSIZE*4+20), (BOXSIZE*2+20))
+	pygame.draw.rect(DISPLAYSURF, WHITE, boxrect, 10)
+	DISPLAYSURF.fill(BLACK, boxrect)
 	#draw the next piece
-	drawPiece(piece, pixelx=WINDOWWIDTH-350, pixely=320)
+	drawPiece(piece, pixelx=WINDOWWIDTH-380, pixely=290, next_piece=True)
 
 if __name__ == '__main__':
 	main()
