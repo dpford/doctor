@@ -141,6 +141,10 @@ def runGame():
 
 			if not isValidPosition(board1, fallingPiece1):
 				P2WINS += 1
+				if P2WINS == 3: #first to three, winner!
+					P1WINS = 0
+					P2WINS = 0
+					return 'P1, take a shot. Suck it down!'
 				return 'Player 2 Wins!'# can't find a new pill, so you lose!
 		#Player 2
 		if fallingPiece2 == None:
@@ -151,6 +155,10 @@ def runGame():
 
 			if not isValidPosition(board2, fallingPiece2):
 				P1WINS += 1
+				if P1WINS == 3: #first to three, winner!
+					P1WINS = 0
+					P2WINS = 0
+					return 'P2, take a shot. Suck it down!'
 				return 'Player 1 Wins!'# can't find a new pill, so you lose!
 
 		checkForQuit()
@@ -914,7 +922,14 @@ def drawBoard(board, board_number):
 			else:
 				drawBox(x, y, board[x][y], 0, 'A', board_number)
 
+def drawGameCountImage(top_left_x, top_left_y):
+	countImageSurf = BASICFONT.render('X', True, TEXTCOLOR)
+	countImageRect = countImageSurf.get_rect()
+	countImageRect.topleft = (top_left_x, top_left_y)
+	DISPLAYSURF.blit(countImageSurf, countImageRect)
+
 def drawStatus(score, level, monsters, board_number):
+	global P1WINS, P2WINS
 	# Player 1
 	if board_number == 1:
 		#draw the score text
@@ -978,6 +993,16 @@ def drawStatus(score, level, monsters, board_number):
 		winsRect = winsSurf.get_rect()
 		winsRect.topleft = (WINDOWWIDTH - 415, 1000)
 		DISPLAYSURF.blit(winsSurf, winsRect)
+
+	#show game score visually
+	if P1WINS:
+		for win in range(P1WINS):
+			drawGameCountImage((WINDOWWIDTH / 2) - 20, WINDOWHEIGHT / 2 - win * 50)
+
+	if P2WINS:
+		for win in range(P2WINS):
+			drawGameCountImage((WINDOWWIDTH / 2) + 20, WINDOWHEIGHT / 2 - win * 50)
+			
 
 	#show game name
 	nameSurf = INGAMETITLEFONT.render("Fuckin' Dr. Mario", True, TEXTCOLOR)
