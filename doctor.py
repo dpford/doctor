@@ -60,11 +60,13 @@ ORIENTATION = [	  ['..',
 				   'B.']]
 
 def main():
-	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete, BIGVIRUSCOUNTFONT, INGAMETITLEFONT
+	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete, BIGVIRUSCOUNTFONT, INGAMETITLEFONT, P1WINS, P2WINS
 	# global MONSTERS
 	pygame.mixer.pre_init(44100, -16, 2, 512)
 	pygame.init()
 	FPSCLOCK = pygame.time.Clock()
+	P1WINS = 0
+	P2WINS = 0
 	# DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 	DISPLAYSURF = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 	BASICFONT = pygame.font.Font('fonts/PressStart2P.ttf', 40)
@@ -96,6 +98,7 @@ def main():
 		
 
 def runGame():
+	global P1WINS, P2WINS
 	# Player 1
 	board1 = getInitialBoard()
 	lastMoveDownTime1 = time.time()
@@ -137,6 +140,7 @@ def runGame():
 			lastFallTime1 = time.time() #reset lastFallTime
 
 			if not isValidPosition(board1, fallingPiece1):
+				P2WINS += 1
 				return 'Player 2 Wins!'# can't find a new pill, so you lose!
 		#Player 2
 		if fallingPiece2 == None:
@@ -146,6 +150,7 @@ def runGame():
 			lastFallTime2 = time.time() #reset lastFallTime
 
 			if not isValidPosition(board2, fallingPiece2):
+				P1WINS += 1
 				return 'Player 1 Wins!'# can't find a new pill, so you lose!
 
 		checkForQuit()
@@ -936,6 +941,13 @@ def drawStatus(score, level, monsters, board_number):
 		virusRect.topleft = (70, 800)
 		DISPLAYSURF.blit(virusSurf, virusRect)
 
+		#draw number of wins
+		winsSurf = BASICFONT.render('1P wins: %s' % P1WINS, True, TEXTCOLOR)
+		winsRect = winsSurf.get_rect()
+		winsRect.topleft = (35, 1000)
+		DISPLAYSURF.blit(winsSurf, winsRect)
+
+
 	elif board_number == 2:
 		#draw the score text
 		scoreSurf = BASICFONT.render('Score: %s' % score, True, TEXTCOLOR)
@@ -960,6 +972,12 @@ def drawStatus(score, level, monsters, board_number):
 		virusRect = virusSurf.get_rect()
 		virusRect.topleft = (WINDOWWIDTH - 390, 800)
 		DISPLAYSURF.blit(virusSurf, virusRect)
+
+		#draw number of wins
+		winsSurf = BASICFONT.render('2P wins: %s' % P2WINS, True, TEXTCOLOR)
+		winsRect = winsSurf.get_rect()
+		winsRect.topleft = (WINDOWWIDTH - 415, 1000)
+		DISPLAYSURF.blit(winsSurf, winsRect)
 
 	#show game name
 	nameSurf = INGAMETITLEFONT.render("Fuckin' Dr. Mario", True, TEXTCOLOR)
