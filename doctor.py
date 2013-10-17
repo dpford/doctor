@@ -923,10 +923,16 @@ def drawBoard(board, board_number):
 				drawBox(x, y, board[x][y], 0, 'A', board_number)
 
 def drawGameCountImage(top_left_x, top_left_y):
-	countImageSurf = BASICFONT.render('X', True, TEXTCOLOR)
-	countImageRect = countImageSurf.get_rect()
+	# countImageSurf = BASICFONT.render('X', True, TEXTCOLOR)
+	# countImageRect = countImageSurf.get_rect()
+	# countImageRect.topleft = (top_left_x, top_left_y)
+	# DISPLAYSURF.blit(countImageSurf, countImageRect)
+	countImage = pygame.image.load('star-large-57-57.jpg')
+	countImageRect = countImage.get_rect()
 	countImageRect.topleft = (top_left_x, top_left_y)
-	DISPLAYSURF.blit(countImageSurf, countImageRect)
+	DISPLAYSURF.blit(countImage, countImageRect)
+
+
 
 def drawStatus(score, level, monsters, board_number):
 	global P1WINS, P2WINS
