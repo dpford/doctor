@@ -75,7 +75,7 @@ def main():
 	INGAMETITLEFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 60)
 	complete = pygame.mixer.Sound('doctor_music/doctor_sonic.ogg')
 	# MONSTERS = 0
-	pygame.display.set_caption("Fuckin' Dr. Mario")
+	pygame.display.set_caption("Mario, M.D.")
 
 	if pygame.joystick.get_count() == 0 or pygame.joystick.Joystick(0).get_name()[:10] == 'VirtualBox':
 		print 'no joysticks'
@@ -83,11 +83,12 @@ def main():
 		pygame.joystick.Joystick(0).init()
 		pygame.joystick.Joystick(1).init()
 
-	songs = ['doctor_music/doctor_fever_guitar.ogg', 'doctor_music/cold-ruins.ogg']
-	song_to_play = songs[random.randint(0,1)]
+	
 
-	showTextScreen("Fuckin' Dr. Mario")
+	showTextScreen("Mario, M.D.")
 	while True: #game loop
+		songs = ['doctor_music/doctor_fever_guitar.ogg', 'doctor_music/cold-ruins.ogg']
+		song_to_play = songs[random.randint(0,1)]
 		pygame.mixer.music.load(song_to_play)
 		pygame.mixer.music.play(-1, 0.0)
 		message = runGame()
@@ -1007,7 +1008,7 @@ def drawStatus(score, level, monsters, board_number):
 			
 
 	#show game name
-	nameSurf = INGAMETITLEFONT.render("Fuckin' Dr. Mario", True, TEXTCOLOR)
+	nameSurf = INGAMETITLEFONT.render("Mario, M.D.", True, TEXTCOLOR)
 	nameRect = nameSurf.get_rect()
 	nameRect.topleft = (680, 80)
 	DISPLAYSURF.blit(nameSurf, nameRect)
