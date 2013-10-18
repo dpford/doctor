@@ -83,12 +83,13 @@ def main():
 		pygame.joystick.Joystick(0).init()
 		pygame.joystick.Joystick(1).init()
 
-	
-
 	showTextScreen("Mario, M.D.")
 	while True: #game loop
-		songs = ['doctor_music/doctor_fever_guitar.ogg', 'doctor_music/cold-ruins.ogg']
-		song_to_play = songs[random.randint(0,1)]
+		songs = ['doctor_music/doctor_fever_guitar.ogg', 
+				 'doctor_music/cold-ruins.ogg', 
+				 'doctor_music/dkc-gangplank.ogg',
+				 'doctor_music/starfox.ogg']
+		song_to_play = songs[random.randint(0,3)]
 		pygame.mixer.music.load(song_to_play)
 		pygame.mixer.music.play(-1, 0.0)
 		message = runGame()
@@ -924,7 +925,7 @@ def drawBoard(board, board_number):
 				drawBox(x, y, board[x][y], 0, 'A', board_number)
 
 def drawGameCountImage(top_left_x, top_left_y):
-	countImage = pygame.image.load('star-large-57-57.jpg')
+	countImage = pygame.image.load('star-80.png')
 	countImageRect = countImage.get_rect()
 	countImageRect.topleft = (top_left_x, top_left_y)
 	DISPLAYSURF.blit(countImage, countImageRect)
@@ -998,13 +999,23 @@ def drawStatus(score, level, monsters, board_number):
 		DISPLAYSURF.blit(winsSurf, winsRect)
 
 	#show game score visually
+
+	#draw the boxes
+	scoreBoxSurf = pygame.Surface((190, 270))
+	scoreBoxRect = scoreBoxSurf.get_rect()
+	scoreBoxRect.bottomleft = ((WINDOWWIDTH / 2) - 95, WINDOWHEIGHT / 2 + 285)
+	scoreBoxSurf.fill(BLACK)
+	scoreBoxSurf.set_alpha(150)
+	DISPLAYSURF.blit(scoreBoxSurf, scoreBoxRect)
+
+	#draw the stars
 	if P1WINS:
 		for win in range(P1WINS):
-			drawGameCountImage((WINDOWWIDTH / 2) - 20, WINDOWHEIGHT / 2 - win * 50)
+			drawGameCountImage((WINDOWWIDTH / 2) - 90, WINDOWHEIGHT / 2 + 200 - win * 80)
 
 	if P2WINS:
 		for win in range(P2WINS):
-			drawGameCountImage((WINDOWWIDTH / 2) + 20, WINDOWHEIGHT / 2 - win * 50)
+			drawGameCountImage((WINDOWWIDTH / 2) + 10, WINDOWHEIGHT / 2 + 200 - win * 80)
 			
 
 	#show game name
