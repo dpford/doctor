@@ -11,7 +11,7 @@ import copy
 
 from pygame.locals import *
 
-STARTING_VIRUS_COUNT = 15
+STARTING_VIRUS_COUNT = 10
 
 FPS = 25
 WINDOWWIDTH = 1920
@@ -69,9 +69,9 @@ def main():
 	P2WINS = 0
 	# DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 	DISPLAYSURF = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
-	BASICFONT = pygame.font.Font('fonts/PressStart2P.ttf', 40)
-	BIGVIRUSCOUNTFONT = pygame.font.Font('fonts/PressStart2P.ttf', 140)
-	BIGFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 120)
+	BASICFONT = pygame.font.Font('fonts/Chunkfive.otf', 60)
+	BIGVIRUSCOUNTFONT = pygame.font.Font('fonts/Chunkfive.otf', 140)
+	BIGFONT = pygame.font.Font('fonts/Chunkfive.otf', 120)
 	INGAMETITLEFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 60)
 	complete = pygame.mixer.Sound('doctor_music/doctor_sonic.ogg')
 	# MONSTERS = 0
@@ -410,7 +410,7 @@ def showTextScreen(text):
 	DISPLAYSURF.blit(titleSurf, titleRect)
 
 	# Draw the additional "Press a key to play." text.
-	pressKeySurf, pressKeyRect = makeTextObjs('Press a key to play.', BASICFONT, TEXTCOLOR)
+	pressKeySurf, pressKeyRect = makeTextObjs('Press a button to continue', BASICFONT, TEXTCOLOR)
 	pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
 
 	DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
@@ -476,7 +476,7 @@ def getInitialBoard():
 		# board.append([BLANK] * BOARDHEIGHT)
 		column = []
 		for p in range(BOARDHEIGHT):
-			if p > (5*BOARDHEIGHT / 12) and MONSTERS < STARTING_VIRUS_COUNT and random.randint(1,10) < 3: #bottom half
+			if p > (5*BOARDHEIGHT / 12) and MONSTERS < STARTING_VIRUS_COUNT and random.randint(1,100) < 9: #bottom 7/12
 				column.append(random.randint(90,92))
 				MONSTERS += 1
 			else:
@@ -939,32 +939,26 @@ def drawStatus(score, level, monsters, board_number):
 		#draw the score text
 		scoreSurf = BASICFONT.render('Score: %s' % score, True, TEXTCOLOR)
 		scoreRect = scoreSurf.get_rect()
-		scoreRect.topleft = (150, 140)
+		scoreRect.topleft = (110, 140)
 		DISPLAYSURF.blit(scoreSurf, scoreRect)
 
 		#draw the level text
 		levelSurf = BASICFONT.render('Level: %s' % level, True, TEXTCOLOR)
 		levelRect = levelSurf.get_rect()
-		levelRect.topleft = (150, 200)
+		levelRect.topleft = (110, 200)
 		DISPLAYSURF.blit(levelSurf, levelRect)
 
 		#draw count remaining
 		virusCountSurf = BIGVIRUSCOUNTFONT.render('%s' % monsters, True, TEXTCOLOR)
 		virusCountRect = virusCountSurf.get_rect()
-		virusCountRect.topleft = (120, 650)
+		virusCountRect.topleft = (145, 850)
 		DISPLAYSURF.blit(virusCountSurf, virusCountRect)
 
 		#draw text below count
 		virusSurf = BASICFONT.render('remaining', True, TEXTCOLOR)
 		virusRect = virusSurf.get_rect()
-		virusRect.topleft = (70, 800)
+		virusRect.topleft = (70, 1000)
 		DISPLAYSURF.blit(virusSurf, virusRect)
-
-		#draw number of wins
-		winsSurf = BASICFONT.render('1P wins: %s' % P1WINS, True, TEXTCOLOR)
-		winsRect = winsSurf.get_rect()
-		winsRect.topleft = (35, 1000)
-		DISPLAYSURF.blit(winsSurf, winsRect)
 
 
 	elif board_number == 2:
@@ -983,22 +977,28 @@ def drawStatus(score, level, monsters, board_number):
 		#draw count remaining
 		virusCountSurf = BIGVIRUSCOUNTFONT.render('%s' % monsters, True, TEXTCOLOR)
 		virusCountRect = virusCountSurf.get_rect()
-		virusCountRect.topleft = (WINDOWWIDTH - 370, 650)
+		virusCountRect.topleft = (WINDOWWIDTH - 310, 850)
 		DISPLAYSURF.blit(virusCountSurf, virusCountRect)
 
 		#draw text below count
 		virusSurf = BASICFONT.render('remaining', True, TEXTCOLOR)
 		virusRect = virusSurf.get_rect()
-		virusRect.topleft = (WINDOWWIDTH - 390, 800)
+		virusRect.topleft = (WINDOWWIDTH - 380, 1000)
 		DISPLAYSURF.blit(virusSurf, virusRect)
 
-		#draw number of wins
-		winsSurf = BASICFONT.render('2P wins: %s' % P2WINS, True, TEXTCOLOR)
-		winsRect = winsSurf.get_rect()
-		winsRect.topleft = (WINDOWWIDTH - 415, 1000)
-		DISPLAYSURF.blit(winsSurf, winsRect)
-
 	#show game score visually
+
+	#draw p1, p2
+	p1Surf = BASICFONT.render('P1', True, TEXTCOLOR)
+	p1Rect = p1Surf.get_rect()
+	p1Rect.topleft = ((WINDOWWIDTH / 2) - 80, WINDOWHEIGHT / 2 + 300)
+	DISPLAYSURF.blit(p1Surf, p1Rect)
+
+	p2Surf = BASICFONT.render('P2', True, TEXTCOLOR)
+	p2Rect = p2Surf.get_rect()
+	p2Rect.topleft = ((WINDOWWIDTH / 2) + 15, WINDOWHEIGHT / 2 + 300)
+	DISPLAYSURF.blit(p2Surf, p2Rect)
+
 
 	#draw the boxes
 	scoreBoxSurf = pygame.Surface((190, 270))
@@ -1008,14 +1008,24 @@ def drawStatus(score, level, monsters, board_number):
 	scoreBoxSurf.set_alpha(150)
 	DISPLAYSURF.blit(scoreBoxSurf, scoreBoxRect)
 
+	#draw the lines
+	one_third = (scoreBoxRect.bottomleft[1] - scoreBoxRect.topleft[1]) / 3
+	pygame.draw.line(DISPLAYSURF, WHITE, scoreBoxRect.topleft, scoreBoxRect.bottomleft, 2)
+	pygame.draw.line(DISPLAYSURF, WHITE, scoreBoxRect.topright, scoreBoxRect.bottomright, 2)
+	pygame.draw.line(DISPLAYSURF, WHITE, scoreBoxRect.topleft, scoreBoxRect.topright, 2)
+	pygame.draw.line(DISPLAYSURF, WHITE, scoreBoxRect.bottomleft, scoreBoxRect.bottomright, 2)
+	pygame.draw.line(DISPLAYSURF, WHITE, scoreBoxRect.midtop, scoreBoxRect.midbottom, 2)
+	pygame.draw.line(DISPLAYSURF, WHITE, (scoreBoxRect.topleft[0], scoreBoxRect.topleft[1] + one_third), (scoreBoxRect.topright[0], scoreBoxRect.topright[1] + one_third), 2)
+	pygame.draw.line(DISPLAYSURF, WHITE, (scoreBoxRect.topleft[0], scoreBoxRect.topleft[1] + 2 * one_third), (scoreBoxRect.topright[0], scoreBoxRect.topright[1] + 2 * one_third), 2)
+
 	#draw the stars
 	if P1WINS:
 		for win in range(P1WINS):
-			drawGameCountImage((WINDOWWIDTH / 2) - 90, WINDOWHEIGHT / 2 + 200 - win * 80)
+			drawGameCountImage((WINDOWWIDTH / 2) - 90, WINDOWHEIGHT / 2 + 200 - win * 90)
 
 	if P2WINS:
 		for win in range(P2WINS):
-			drawGameCountImage((WINDOWWIDTH / 2) + 10, WINDOWHEIGHT / 2 + 200 - win * 80)
+			drawGameCountImage((WINDOWWIDTH / 2) + 10, WINDOWHEIGHT / 2 + 200 - win * 90)
 			
 
 	#show game name
@@ -1053,31 +1063,31 @@ def drawNextPiece(piece, board_number):
 	# Player 1
 	if board_number == 1:
 		# draw the next text
-		px = 200
-		py = 290
+		px = 140
+		py = 390
 		nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR)
 		nextRect = nextSurf.get_rect()
-		nextRect.topleft = (200, 280)
+		nextRect.topleft = (150, 380)
 		DISPLAYSURF.blit(nextSurf, nextRect)
 		#draw the box behind piece
 		boxrect = (px-7, py+70, (BOXSIZE*4+20), (BOXSIZE*2+20))
-		pygame.draw.rect(DISPLAYSURF, WHITE, boxrect, 10)
 		DISPLAYSURF.fill(BLACK, boxrect)
+		pygame.draw.rect(DISPLAYSURF, WHITE, boxrect, 2)
 		#draw the next piece
 		drawPiece(piece, 1, pixelx=px, pixely=py, next_piece=True)
 	# Player 2
 	elif board_number == 2:
 		# draw the next text
-		px = 1630
-		py = 290
+		px = 1610
+		py = 390
 		nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR)
 		nextRect = nextSurf.get_rect()
-		nextRect.topleft = (WINDOWWIDTH - 300, 280)
+		nextRect.topleft = (WINDOWWIDTH - 310, 380)
 		DISPLAYSURF.blit(nextSurf, nextRect)
 		#draw the box behind the piece
 		boxrect = (px-7, py+70, (BOXSIZE*4+20), (BOXSIZE*2+20))
-		pygame.draw.rect(DISPLAYSURF, WHITE, boxrect, 10)
 		DISPLAYSURF.fill(BLACK, boxrect)
+		pygame.draw.rect(DISPLAYSURF, WHITE, boxrect, 2)
 		#draw the next piece
 		drawPiece(piece, 2, pixelx=px, pixely=py, next_piece=True)
 
