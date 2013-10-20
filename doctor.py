@@ -100,9 +100,12 @@ def main():
 		
 
 def runGame():
-	global P1WINS, P2WINS
+	global P1WINS, P2WINS, P1PIECE, P2PIECE
 	# Player 1
 	board1 = getInitialBoard()
+	piecesList = createPieces(200)
+	P1PIECE = 2
+	P2PIECE = 2
 	lastMoveDownTime1 = time.time()
 	lastMoveSidewaysTime1 = time.time()
 	lastFallTime1 = time.time()
@@ -112,13 +115,13 @@ def runGame():
 	score1 = 0
 	level1, fallFreq1 = calculateLevelAndFallFreq(score1)
 
-	fallingPiece1 = getNewPiece()
-	nextPiece1 = getNewPiece()
+	# fallingPiece1 = getNewPiece()
+	# nextPiece1 = getNewPiece()
+
+	fallingPiece1 = piecesList[0]
+	nextPiece1 = piecesList[1]
 
 	# Player 2
-	# board2 = board1[:]
-	# board2 = list(board1)
-	# board2 = getInitialBoard()
 	board2 = copy.deepcopy(board1)
 	lastMoveDownTime2 = time.time()
 	lastMoveSidewaysTime2 = time.time()
@@ -129,8 +132,13 @@ def runGame():
 	score2 = 0
 	level2, fallFreq2 = calculateLevelAndFallFreq(score2)
 
-	fallingPiece2 = getNewPiece()
-	nextPiece2 = getNewPiece()
+	# fallingPiece2 = getNewPiece()
+	# nextPiece2 = getNewPiece()
+
+	fallingPiece2 = piecesList[0]
+	nextPiece2 = piecesList[1]
+
+
 
 
 	while True: #main game loop
@@ -138,7 +146,8 @@ def runGame():
 		if fallingPiece1 == None:
 			# No falling pill in play, so put one at the top
 			fallingPiece1 = nextPiece1
-			nextPiece1 = getNewPiece()
+			nextPiece1 = piecesList[P1PIECE]
+			P1PIECE += 1
 			lastFallTime1 = time.time() #reset lastFallTime
 
 			if not isValidPosition(board1, fallingPiece1):
@@ -152,7 +161,8 @@ def runGame():
 		if fallingPiece2 == None:
 			# No falling pill in play, so put one at the top
 			fallingPiece2 = nextPiece2
-			nextPiece2 = getNewPiece()
+			nextPiece2 = piecesList[P2PIECE]
+			P2PIECE += 1
 			lastFallTime2 = time.time() #reset lastFallTime
 
 			if not isValidPosition(board2, fallingPiece2):
@@ -440,6 +450,13 @@ def getNewPiece():
 				'x': int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2),
 				'y': 0}
 	return newPiece
+
+def createPieces(length):
+	piecesList = []
+	for i in range(length):
+		piecesList.append(getNewPiece())
+	return piecesList
+
 
 
 def addToBoard(board, piece):
