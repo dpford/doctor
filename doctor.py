@@ -1046,7 +1046,7 @@ def drawStatus(score, level, monsters, board_number):
 			
 
 	#show game name
-	nameSurf = INGAMETITLEFONT.render("Mario, M.D.", True, TEXTCOLOR)
+	nameSurf = pygame.image.load('marioMD_v1_green.png')
 	nameRect = nameSurf.get_rect()
 	nameRect.topleft = (680, 80)
 	DISPLAYSURF.blit(nameSurf, nameRect)
