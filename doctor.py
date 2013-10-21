@@ -83,7 +83,7 @@ def main():
 		pygame.joystick.Joystick(0).init()
 		pygame.joystick.Joystick(1).init()
 
-	showTextScreen("Mario, M.D.")
+	showLogoScreen()
 	while True: #game loop
 		songs = ['doctor_music/doctor_fever_guitar.ogg', 
 				 'doctor_music/cold-ruins.ogg', 
@@ -103,7 +103,8 @@ def runGame():
 	global P1WINS, P2WINS, P1PIECE, P2PIECE
 	# Player 1
 	board1 = getInitialBoard()
-	piecesList = createPieces(200)
+	piecesList1 = createPieces(200)
+	piecesList2 = copy.deepcopy(piecesList1)
 	P1PIECE = 2
 	P2PIECE = 2
 	lastMoveDownTime1 = time.time()
@@ -118,8 +119,8 @@ def runGame():
 	# fallingPiece1 = getNewPiece()
 	# nextPiece1 = getNewPiece()
 
-	fallingPiece1 = piecesList[0]
-	nextPiece1 = piecesList[1]
+	fallingPiece1 = piecesList1[0]
+	nextPiece1 = piecesList1[1]
 
 	# Player 2
 	board2 = copy.deepcopy(board1)
@@ -135,8 +136,8 @@ def runGame():
 	# fallingPiece2 = getNewPiece()
 	# nextPiece2 = getNewPiece()
 
-	fallingPiece2 = piecesList[0]
-	nextPiece2 = piecesList[1]
+	fallingPiece2 = piecesList2[0]
+	nextPiece2 = piecesList2[1]
 
 
 
@@ -146,7 +147,7 @@ def runGame():
 		if fallingPiece1 == None:
 			# No falling pill in play, so put one at the top
 			fallingPiece1 = nextPiece1
-			nextPiece1 = piecesList[P1PIECE]
+			nextPiece1 = piecesList1[P1PIECE]
 			P1PIECE += 1
 			lastFallTime1 = time.time() #reset lastFallTime
 
@@ -161,7 +162,7 @@ def runGame():
 		if fallingPiece2 == None:
 			# No falling pill in play, so put one at the top
 			fallingPiece2 = nextPiece2
-			nextPiece2 = piecesList[P2PIECE]
+			nextPiece2 = piecesList2[P2PIECE]
 			P2PIECE += 1
 			lastFallTime2 = time.time() #reset lastFallTime
 
@@ -424,6 +425,25 @@ def showTextScreen(text):
 	pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
 
 	DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
+
+	while checkForKeyPress() == None:
+		pygame.display.update()
+		FPSCLOCK.tick()
+
+def showLogoScreen():
+	# Displays the logo until a button is pressed
+	mainLogoSurf = pygame.image.load('marioMD_v1_green.png')
+	mainLogoRect = mainLogoSurf.get_rect()
+	mainLogoRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) - 100)
+
+	DISPLAYSURF.blit(mainLogoSurf, mainLogoRect)
+
+	# Draw the additional "Press a key to play." text.
+	pressKeySurf, pressKeyRect = makeTextObjs('Press a button to start', BASICFONT, TEXTCOLOR)
+	pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
+
+	DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
+
 
 	while checkForKeyPress() == None:
 		pygame.display.update()
@@ -1046,9 +1066,9 @@ def drawStatus(score, level, monsters, board_number):
 			
 
 	#show game name
-	nameSurf = pygame.image.load('marioMD_v1_green.png')
+	nameSurf = pygame.image.load('marioMD_v1_green_small.png')
 	nameRect = nameSurf.get_rect()
-	nameRect.topleft = (680, 80)
+	nameRect.midtop = (WINDOWWIDTH/2, 60)
 	DISPLAYSURF.blit(nameSurf, nameRect)
 
 
