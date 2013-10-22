@@ -73,7 +73,7 @@ def main():
 	BIGVIRUSCOUNTFONT = pygame.font.Font('fonts/Chunkfive.otf', 140)
 	BIGFONT = pygame.font.Font('fonts/Chunkfive.otf', 120)
 	INGAMETITLEFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 60)
-	complete = pygame.mixer.Sound('doctor_music/doctor_sonic.ogg')
+	complete = pygame.mixer.Sound('doctor_music/mario3-shell.ogg')
 	# MONSTERS = 0
 	pygame.display.set_caption("Mario, M.D.")
 
