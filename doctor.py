@@ -73,7 +73,7 @@ def main():
 	BIGVIRUSCOUNTFONT = pygame.font.Font('fonts/Chunkfive.otf', 140)
 	BIGFONT = pygame.font.Font('fonts/Chunkfive.otf', 120)
 	INGAMETITLEFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 60)
-	complete = pygame.mixer.Sound('doctor_music/mario3-shell.ogg')
+	complete = pygame.mixer.Sound('doctor_music/smw-gain.ogg')
 	# MONSTERS = 0
 	pygame.display.set_caption("Mario, M.D.")
 
@@ -94,7 +94,10 @@ def main():
 		pygame.mixer.music.play(-1, 0.0)
 		message = runGame()
 		pygame.mixer.music.fadeout(1000)
-		pygame.mixer.music.load('doctor_music/08_-_Dr._Mario_-_NES_-_VS_Game_Over.ogg')
+		if P2WINS == 3 or P1WINS == 3:
+			pygame.mixer.music.load('doctor_music/08_-_Dr._Mario_-_NES_-_VS_Game_Over.ogg')
+		else:
+			pygame.mixer.music.load('doctor_music/05_-_Dr._Mario_-_NES_-_Fever_Clear.ogg')
 		pygame.mixer.music.play(-1, 0.0)
 		showTextScreen('%s' % (message,))
 		
