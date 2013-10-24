@@ -60,13 +60,16 @@ ORIENTATION = [	  ['..',
 				   'B.']]
 
 def main():
-	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete, BIGVIRUSCOUNTFONT, INGAMETITLEFONT, P1WINS, P2WINS
+	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete, BIGVIRUSCOUNTFONT, INGAMETITLEFONT, P1WINS, P2WINS, P1LEVEL, P2LEVEL
 	# global MONSTERS
 	pygame.mixer.pre_init(44100, -16, 2, 512)
 	pygame.init()
 	FPSCLOCK = pygame.time.Clock()
 	P1WINS = 0
 	P2WINS = 0
+	# initialize levels
+	P1LEVEL = 1
+	P2LEVEL = 1
 	# DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 	DISPLAYSURF = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 	BASICFONT = pygame.font.Font('fonts/Chunkfive.otf', 60)
@@ -103,7 +106,7 @@ def main():
 		
 
 def runGame():
-	global P1WINS, P2WINS, P1PIECE, P2PIECE
+	global P1WINS, P2WINS, P1PIECE, P2PIECE, P1LEVEL, P2LEVEL
 	# Player 1
 	board1 = getInitialBoard()
 	piecesList1 = createPieces(200)
@@ -118,6 +121,11 @@ def runGame():
 	movingRight1 = False
 	score1 = 0
 	level1, fallFreq1 = calculateLevelAndFallFreq(score1)
+	print level1
+	if level1 > P1LEVEL:
+		pygame.mixer.Sound('doctor_music/level_up.ogg').play()
+		P1LEVEL = level1
+
 
 	# fallingPiece1 = getNewPiece()
 	# nextPiece1 = getNewPiece()
@@ -135,6 +143,9 @@ def runGame():
 	movingRight2 = False
 	score2 = 0
 	level2, fallFreq2 = calculateLevelAndFallFreq(score2)
+	if level2 > P2LEVEL:
+		pygame.mixer.Sound('doctor_music/level_up.ogg').play()
+		P2LEVEL = level2
 
 	# fallingPiece2 = getNewPiece()
 	# nextPiece2 = getNewPiece()
@@ -340,6 +351,10 @@ def runGame():
 				findOrphans(board1)
 				score1 += removeCompletes(board1, 1)
 				level1, fallFreq1 = calculateLevelAndFallFreq(score1)
+				if level1 > P1LEVEL:
+					print 'player 1 move up'
+					pygame.mixer.Sound('doctor_music/level_up.ogg').play()
+					P1LEVEL = level1
 				fallingPiece1 = None
 			else:
 				fallingPiece1['y'] += 1
@@ -368,6 +383,10 @@ def runGame():
 				findOrphans(board2)
 				score2 += removeCompletes(board2, 2)
 				level2, fallFreq2 = calculateLevelAndFallFreq(score2)
+				if level2 > P2LEVEL:
+					print 'player 2 move up'
+					pygame.mixer.Sound('doctor_music/level_up.ogg').play()
+					P2LEVEL = level2
 				fallingPiece2 = None
 			else:
 				fallingPiece2['y'] += 1
