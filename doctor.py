@@ -121,7 +121,6 @@ def runGame():
 	movingRight1 = False
 	score1 = 0
 	level1, fallFreq1 = calculateLevelAndFallFreq(score1)
-	print level1
 	if level1 > P1LEVEL:
 		pygame.mixer.Sound('doctor_music/level_up.ogg').play()
 		P1LEVEL = level1
@@ -352,7 +351,6 @@ def runGame():
 				score1 += removeCompletes(board1, 1)
 				level1, fallFreq1 = calculateLevelAndFallFreq(score1)
 				if level1 > P1LEVEL:
-					print 'player 1 move up'
 					pygame.mixer.Sound('doctor_music/level_up.ogg').play()
 					P1LEVEL = level1
 				fallingPiece1 = None
@@ -384,7 +382,6 @@ def runGame():
 				score2 += removeCompletes(board2, 2)
 				level2, fallFreq2 = calculateLevelAndFallFreq(score2)
 				if level2 > P2LEVEL:
-					print 'player 2 move up'
 					pygame.mixer.Sound('doctor_music/level_up.ogg').play()
 					P2LEVEL = level2
 				fallingPiece2 = None
@@ -481,7 +478,7 @@ def checkForQuit():
 
 def calculateLevelAndFallFreq(score):
 	level = int(score / 20) + 1
-	fallFreq = 0.27 - (level * 0.01)
+	fallFreq = 0.4 - (level * 0.02)
 	return level, fallFreq
 
 def getNewPiece():
@@ -827,6 +824,7 @@ def removeCompletes(board, board_number):
 		setLocation = isCompleteSetHoriz(board, y, board_number)
 		if setLocation:
 			shiftRemainingYHoriz(board, setLocation[0], setLocation[1], y)
+			return 10
 		else:
 			y -= 1
 	x = BOARDWIDTH - 1
@@ -834,9 +832,10 @@ def removeCompletes(board, board_number):
 		setLocation = isCompleteSetVert(board, x, board_number)
 		if setLocation:
 			shiftRemainingXVert(board, x, setLocation[0], setLocation[1])
+			return 10
 		else:
 			x -= 1
-	return 1
+	return 0
 
 def convertToPixelCoords(boxx, boxy, board_number):
 	# convert the given xy coordinates of the board to xy 
@@ -1139,7 +1138,7 @@ def drawNextPiece(piece, board_number):
 		# draw the next text
 		px = 1610
 		py = 390
-		nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR)
+		nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR, BLUE)
 		nextRect = nextSurf.get_rect()
 		nextRect.topleft = (WINDOWWIDTH - 310, 380)
 		DISPLAYSURF.blit(nextSurf, nextRect)
