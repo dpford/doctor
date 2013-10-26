@@ -1148,7 +1148,7 @@ def drawNextPiece(piece, board_number):
 		# draw the next text
 		px = 1610
 		py = 390
-		nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR, BLUE)
+		nextSurf = BASICFONT.render('Next:', True, TEXTCOLOR)
 		nextRect = nextSurf.get_rect()
 		nextRect.topleft = (WINDOWWIDTH - 310, 380)
 		DISPLAYSURF.blit(nextSurf, nextRect)
