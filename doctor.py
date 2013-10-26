@@ -477,7 +477,7 @@ def checkForQuit():
 		pygame.event.post(event) # put other KEYUP event objects back
 
 def calculateLevelAndFallFreq(score):
-	level = int(score / 20) + 1
+	level = int(score / 100) + 1
 	fallFreq = 0.4 - (level * 0.02)
 	return level, fallFreq
 
