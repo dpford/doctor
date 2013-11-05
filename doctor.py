@@ -60,11 +60,12 @@ ORIENTATION = [	  ['..',
 				   'B.']]
 
 def main():
-	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete, BIGVIRUSCOUNTFONT, INGAMETITLEFONT, P1WINS, P2WINS, P1LEVEL, P2LEVEL
+	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete, BIGVIRUSCOUNTFONT, INGAMETITLEFONT, P1WINS, P2WINS, P1LEVEL, P2LEVEL, TRACKNUMBER
 	# global MONSTERS
 	pygame.mixer.pre_init(44100, -16, 2, 512)
 	pygame.init()
 	FPSCLOCK = pygame.time.Clock()
+	TRACKNUMBER = 0
 	P1WINS = 0
 	P2WINS = 0
 	# initialize levels
@@ -92,11 +93,13 @@ def main():
 				 'doctor_music/cold-ruins.ogg', 
 				 'doctor_music/dkc-gangplank.ogg',
 				 'doctor_music/starfox.ogg']
-		song_to_play = songs[random.randint(0,3)]
+		# song_to_play = songs[random.randint(0,3)]
+		song_to_play = songs[TRACKNUMBER % len(songs)]
 		pygame.mixer.music.load(song_to_play)
 		pygame.mixer.music.play(-1, 0.0)
 		message = runGame()
 		pygame.mixer.music.fadeout(1000)
+		TRACKNUMBER += 1
 		if P2WINS == 3 or P1WINS == 3:
 			pygame.mixer.music.load('doctor_music/08_-_Dr._Mario_-_NES_-_VS_Game_Over.ogg')
 		else:
