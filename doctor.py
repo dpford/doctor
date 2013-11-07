@@ -60,8 +60,8 @@ ORIENTATION = [	  ['..',
 				   'B.']]
 
 def main():
-	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete, BIGVIRUSCOUNTFONT, INGAMETITLEFONT, P1WINS, P2WINS, P1LEVEL, P2LEVEL, TRACKNUMBER
-	# global MONSTERS
+	global FPSCLOCK, DISPLAYSURF, BASICFONT, BIGFONT, complete, BIGVIRUSCOUNTFONT, INGAMETITLEFONT, P1WINS, P2WINS, P1LEVEL, P2LEVEL, TRACKNUMBER, DIFFICULTY
+	STARTING_VIRUS_COUNT = 10
 	pygame.mixer.pre_init(44100, -16, 2, 512)
 	pygame.init()
 	FPSCLOCK = pygame.time.Clock()
@@ -92,8 +92,12 @@ def main():
 		songs = ['doctor_music/doctor_fever_guitar.ogg', 
 				 'doctor_music/cold-ruins.ogg', 
 				 'doctor_music/dkc-gangplank.ogg',
-				 'doctor_music/starfox.ogg']
-		# song_to_play = songs[random.randint(0,3)]
+				 'doctor_music/starfox.ogg',
+				 'doctor_music/ducktales-moon.ogg',
+				 'doctor_music/fzero-mute.ogg',
+				 'doctor_music/megamanx-stormeagle.ogg',
+				 'doctor_music/ff6-decisive.ogg',
+				 'doctor_music/mariokart-rainbow.ogg',]
 		song_to_play = songs[TRACKNUMBER % len(songs)]
 		pygame.mixer.music.load(song_to_play)
 		pygame.mixer.music.play(-1, 0.0)
@@ -439,6 +443,31 @@ def checkForKeyPress():
 			return event.button
 	return None
 
+def checkForStartorSelectPress():
+	#check to see if start or select was pressed
+	checkForQuit()
+
+	for event in pygame.event.get():
+		if event.type == JOYBUTTONUP and event.button == 3:
+			return event.button
+		elif event.type == JOYBUTTONUP and event.button == 2:
+			return main()
+	return None
+
+def checkForLogoPress():
+	#check to see what changes should be made, if any, to the logo screen
+	checkForQuit()
+
+	for event in pygame.event.get():
+		if event.type == JOYBUTTONUP and event.button == 3:
+			return 'start'
+		elif event.type == JOYAXISMOTION and event.axis == 0:
+			if int(event.value) == -1:
+				return 'left'
+			elif int(event.value) == 1:
+				return 'right'
+	return None
+
 def showTextScreen(text):
 	# Displays large text in center of screen until a key is pressed
 	# Draw the text drop shadow
@@ -453,16 +482,17 @@ def showTextScreen(text):
 	DISPLAYSURF.blit(titleSurf, titleRect)
 
 	# Draw the additional "Press a key to play." text.
-	pressKeySurf, pressKeyRect = makeTextObjs('Press a button to continue', BASICFONT, TEXTCOLOR)
+	pressKeySurf, pressKeyRect = makeTextObjs('Press the start button to continue', BASICFONT, TEXTCOLOR)
 	pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
 
 	DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
 
-	while checkForKeyPress() == None:
+	while checkForStartorSelectPress() == None:
 		pygame.display.update()
 		FPSCLOCK.tick()
 
 def showLogoScreen():
+	global DIFFICULTY
 	# Displays the logo until a button is pressed
 	mainLogoSurf = pygame.image.load('marioMD_v1_green.png')
 	mainLogoRect = mainLogoSurf.get_rect()
@@ -471,15 +501,67 @@ def showLogoScreen():
 	DISPLAYSURF.blit(mainLogoSurf, mainLogoRect)
 
 	# Draw the additional "Press a key to play." text.
-	pressKeySurf, pressKeyRect = makeTextObjs('Press a button to start', BASICFONT, TEXTCOLOR)
-	pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
+	pressKeySurf, pressKeyRect = makeTextObjs('Press start!', BASICFONT, TEXTCOLOR)
+	pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 400)
+
+	#Draw the easy
+	easySurf, easyRect = makeTextObjs('Easy', BASICFONT, TEXTCOLOR)
+	easyRect.center = (int(WINDOWWIDTH / 2) - 300, int(WINDOWHEIGHT / 2) + 200)
+
+	#Draw the hard
+	hardSurf, hardRect = makeTextObjs('Hard', BASICFONT, TEXTCOLOR)
+	hardRect.center = (int(WINDOWWIDTH / 2) + 300, int(WINDOWHEIGHT / 2) + 200)
+
+	#Draw initial box around Easy
+	padding = 20
+	pygame.draw.lines(DISPLAYSURF, BLUE, True, [(easyRect.topleft[0]-padding, easyRect.topleft[1]-padding), 
+												(easyRect.bottomleft[0]-padding, easyRect.bottomleft[1]+padding), 
+												(easyRect.bottomright[0]+padding, easyRect.bottomright[1]+padding), 
+												(easyRect.topright[0]+padding, easyRect.topright[1]-padding)], 
+												4)
+
 
 	DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
+	DISPLAYSURF.blit(easySurf, easyRect)
+	DISPLAYSURF.blit(hardSurf, hardRect)
 
+	DIFFICULTY = 'easy'
 
-	while checkForKeyPress() == None:
-		pygame.display.update()
-		FPSCLOCK.tick()
+	start_game = False
+
+	while not start_game:
+		result = checkForLogoPress()
+		if not result:
+			pygame.display.update()
+			FPSCLOCK.tick()
+		if result:
+			if result == 'left' and DIFFICULTY == 'hard':
+				pygame.draw.lines(DISPLAYSURF, BLUE, True, [(easyRect.topleft[0]-padding, easyRect.topleft[1]-padding), 
+													(easyRect.bottomleft[0]-padding, easyRect.bottomleft[1]+padding), 
+													(easyRect.bottomright[0]+padding, easyRect.bottomright[1]+padding), 
+													(easyRect.topright[0]+padding, easyRect.topright[1]-padding)], 
+													4)
+				pygame.draw.lines(DISPLAYSURF, BLACK, True, [(hardRect.topleft[0]-padding, hardRect.topleft[1]-padding), 
+													(hardRect.bottomleft[0]-padding, hardRect.bottomleft[1]+padding), 
+													(hardRect.bottomright[0]+padding, hardRect.bottomright[1]+padding), 
+													(hardRect.topright[0]+padding, hardRect.topright[1]-padding)], 
+													4)
+				DIFFICULTY = 'easy'
+			elif result == 'right' and DIFFICULTY == 'easy':
+				pygame.draw.lines(DISPLAYSURF, BLACK, True, [(easyRect.topleft[0]-padding, easyRect.topleft[1]-padding), 
+													(easyRect.bottomleft[0]-padding, easyRect.bottomleft[1]+padding), 
+													(easyRect.bottomright[0]+padding, easyRect.bottomright[1]+padding), 
+													(easyRect.topright[0]+padding, easyRect.topright[1]-padding)], 
+													4)
+				pygame.draw.lines(DISPLAYSURF, BLUE, True, [(hardRect.topleft[0]-padding, hardRect.topleft[1]-padding), 
+													(hardRect.bottomleft[0]-padding, hardRect.bottomleft[1]+padding), 
+													(hardRect.bottomright[0]+padding, hardRect.bottomright[1]+padding), 
+													(hardRect.topright[0]+padding, hardRect.topright[1]-padding)], 
+													4)
+				DIFFICULTY = 'hard'
+			elif result == 'start':
+				start_game = True
+
 
 def checkForQuit():
 	for event in pygame.event.get(QUIT): #get all QUIT events
@@ -538,18 +620,33 @@ def addToBoard(board, piece):
 				board[x + piece['x']][y + piece['y']] = put_on_board
 
 def getInitialBoard():
-	global MONSTERS
+	import numpy.random as nprnd
+	global MONSTERS, DIFFICULTY, STARTING_VIRUS_COUNT
+	virus_multiplier = 1.0
+	STARTING_VIRUS_COUNT = 10
+	if DIFFICULTY == 'hard':
+		STARTING_VIRUS_COUNT = 20
 	MONSTERS = 0
 	board = []
 	for i in range(BOARDWIDTH):
 		# board.append([BLANK] * BOARDHEIGHT)
 		column = []
+		if i > 6 and MONSTERS * 1.0 / STARTING_VIRUS_COUNT < (i + 1) * 1.0 / BOARDWIDTH:
+			virus_multiplier = virus_multiplier * 1.4
 		for p in range(BOARDHEIGHT):
-			if p > (5*BOARDHEIGHT / 12) and MONSTERS < STARTING_VIRUS_COUNT and random.randint(1,100) < 9: #bottom 7/12
+
+			# if i > 6 and MONSTERS < STARTING_VIRUS_COUNT:
+			if p > (BOARDHEIGHT - 12) and MONSTERS < STARTING_VIRUS_COUNT and random.randint(1,80) < STARTING_VIRUS_COUNT * virus_multiplier: #bottom 3/5
 				column.append(random.randint(90,92))
 				MONSTERS += 1
 			else:
 				column.append(BLANK)
+			# else:
+			# 	if p > (BOARDHEIGHT - 12) and MONSTERS < STARTING_VIRUS_COUNT and random.randint(1,80) < STARTING_VIRUS_COUNT * virus_multiplier: #bottom 3/5
+			# 		column.append(random.randint(90,92))
+			# 		MONSTERS += 1
+			# 	else:
+			# 		column.append(BLANK)
 		board.append(column)
 	global MONSTERS1
 	MONSTERS1 = MONSTERS
