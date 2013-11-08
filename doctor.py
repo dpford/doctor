@@ -176,7 +176,7 @@ def runGame():
 				if P2WINS == 3: #first to three, winner!
 					P1WINS = 0
 					P2WINS = 0
-					return 'P1, take a shot. Suck it down!'
+					return 'P1, drink. Suck it down!'
 				return 'Player 2 Wins!'# can't find a new pill, so you lose!
 		#Player 2
 		if fallingPiece2 == None:
@@ -191,7 +191,7 @@ def runGame():
 				if P1WINS == 3: #first to three, winner!
 					P1WINS = 0
 					P2WINS = 0
-					return 'P2, take a shot. Suck it down!'
+					return 'P2, drink. Suck it down!'
 				return 'Player 1 Wins!'# can't find a new pill, so you lose!
 
 		checkForQuit()
@@ -200,14 +200,14 @@ def runGame():
 			if P1WINS == 3: #first to three, winner!
 				P1WINS = 0
 				P2WINS = 0
-				return 'P2, take a shot. Suck it down!'
+				return 'P2, drink. Suck it down!'
 			return 'Player 1 Wins!'# can't find a new pill, so you lose!
 		elif MONSTERS2 == 0:
 			P2WINS += 1
 			if P2WINS == 3: #first to three, winner!
 				P1WINS = 0
 				P2WINS = 0
-				return 'P1, take a shot. Suck it down!'
+				return 'P1, drink. Suck it down!'
 			return 'Player 2 Wins!'# can't find a new pill, so you lose!
 		for event in pygame.event.get(): #event handling loop
 			if event.type == JOYBUTTONUP:
