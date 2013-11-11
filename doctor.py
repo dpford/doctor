@@ -23,7 +23,6 @@ BOARDHEIGHT = 20
 MOVESIDEWAYSFREQ = 0.1
 MOVEDOWNFREQ = 0.1
 
-# XMARGIN = int((WINDOWWIDTH - BOARDWIDTH * BOXSIZE) / 2)
 XMARGIN1 = 450
 XMARGIN2 = 1070
 TOPMARGIN = WINDOWHEIGHT - (BOARDHEIGHT * BOXSIZE) -5
@@ -71,14 +70,12 @@ def main():
 	# initialize levels
 	P1LEVEL = 1
 	P2LEVEL = 1
-	# DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 	DISPLAYSURF = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 	BASICFONT = pygame.font.Font('fonts/Chunkfive.otf', 60)
 	BIGVIRUSCOUNTFONT = pygame.font.Font('fonts/Chunkfive.otf', 140)
 	BIGFONT = pygame.font.Font('fonts/Chunkfive.otf', 120)
 	INGAMETITLEFONT = pygame.font.Font('fonts/Super Mario Bros..ttf', 60)
 	complete = pygame.mixer.Sound('doctor_music/smw-gain.ogg')
-	# MONSTERS = 0
 	pygame.display.set_caption("Mario, M.D.")
 
 	if pygame.joystick.get_count() == 0 or pygame.joystick.Joystick(0).get_name()[:10] == 'VirtualBox':
@@ -132,10 +129,6 @@ def runGame():
 		pygame.mixer.Sound('doctor_music/level_up.ogg').play()
 		P1LEVEL = level1
 
-
-	# fallingPiece1 = getNewPiece()
-	# nextPiece1 = getNewPiece()
-
 	fallingPiece1 = piecesList1[0]
 	nextPiece1 = piecesList1[1]
 
@@ -153,14 +146,8 @@ def runGame():
 		pygame.mixer.Sound('doctor_music/level_up.ogg').play()
 		P2LEVEL = level2
 
-	# fallingPiece2 = getNewPiece()
-	# nextPiece2 = getNewPiece()
-
 	fallingPiece2 = piecesList2[0]
 	nextPiece2 = piecesList2[1]
-
-
-
 
 	while True: #main game loop
 		#Player 1
@@ -294,56 +281,6 @@ def runGame():
 					 	movingRight2 = False
 					 	lastMoveSidewaysTime2 = time.time()
 
-			# elif event.type == KEYUP:
-			# 	if (event.key == K_p): # pause game
-			# 		DISPLAYSURF.fill(BGCOLOR)
-			# 		pygame.mixer.music.stop()
-			# 		showTextScreen('Paused') #until a key is pressed
-			# 		pygame.mixer.music.play(-1, 0.0)
-			# 		lastFallTime = time.time()
-			# 		lastMoveDownTime = time.time()
-			# 		lastMoveSidewaysTime = time.time()
-			# 	elif (event.key == K_LEFT or event.key == K_a):
-			# 		movingLeft = False
-			# 	elif (event.key == K_RIGHT or event.key == K_d):
-			# 		movingRight = False
-			# 	elif (event.key == K_DOWN or event.key == K_s):
-			# 		movingDown = False
-
-			# elif event.type == KEYDOWN:
-			# 	# moving block sideways
-			# 	if (event.key == K_LEFT or event.key == K_a) and \
-			# 		isValidPosition(board, fallingPiece, adjX=-1):
-			# 	 	fallingPiece['x'] -= 1
-			# 	 	movingLeft = True
-			# 	 	movingRight = False
-			# 	 	lastMoveSidewaysTime = time.time()
-
-			# 	elif (event.key == K_RIGHT or event.key == K_d) and isValidPosition(board, fallingPiece, adjX=1):
-			# 	 	fallingPiece['x'] += 1
-			# 	 	movingRight = True
-			# 	 	movingLeft = False
-			# 	 	lastMoveSidewaysTime = time.time()
-
-			# 	 #rotating the pill (if there's room)
-			# 	elif (event.key == K_UP or event.key == K_z):
-			# 		fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
-			# 		if not isValidPosition(board, fallingPiece):
-			# 			fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
-			# 	elif (event.key ==K_x): #other direction
-			# 		fallingPiece['rotation'] = (fallingPiece['rotation'] - 1) % 4
-			# 		if not isValidPosition(board, fallingPiece):
-			# 			fallingPiece['rotation'] = (fallingPiece['rotation'] + 1) % 4
-			# 	# drop pill faster with down key
-			# 	elif (event.key == K_DOWN or event.key == K_s):
-			# 		movingDown = True
-			# 		if isValidPosition(board, fallingPiece, adjY=1):
-			# 			fallingPiece['y'] += 1
-			# 		lastMoveDownTime = time.time()
-
-
-					
-
 		#Player 1
 		if (movingLeft1 or movingRight1) and time.time() - lastMoveSidewaysTime1 > MOVESIDEWAYSFREQ:
 			if movingLeft1 and isValidPosition(board1, fallingPiece1, adjX=-1):
@@ -362,7 +299,6 @@ def runGame():
 			if not isValidPosition(board1, fallingPiece1, adjY=1):
 				# it's landed, add to board
 				addToBoard(board1, fallingPiece1)
-# THIS WAS LAZY, FIX THIS _________________________________***************************************************
 				score1 += removeCompletes(board1, 1)
 				findOrphans(board1)
 				score1 += removeCompletes(board1, 1)
@@ -393,7 +329,6 @@ def runGame():
 			if not isValidPosition(board2, fallingPiece2, adjY=1):
 				# it's landed, add to board
 				addToBoard(board2, fallingPiece2)
-# THIS WAS LAZY, FIX THIS _________________________________***************************************************
 				score2 += removeCompletes(board2, 2)
 				findOrphans(board2)
 				score2 += removeCompletes(board2, 2)
@@ -405,7 +340,7 @@ def runGame():
 			else:
 				fallingPiece2['y'] += 1
 				lastFallTime2 = time.time()
-#----------------------------------------------------------------------------
+
 		# draw everything on the screen
 		DISPLAYSURF.fill(BGCOLOR)
 		drawBoard(board1, 1)
@@ -598,7 +533,6 @@ def addToBoard(board, piece):
 	for x in range(TEMPLATEWIDTH):
 		for y in range(TEMPLATEHEIGHT):
 			if ORIENTATION[piece['rotation']][y][x] == 'A':
-				# this needs to be fixed
 				if piece['rotation'] == 0:
 					put_on_board = piece['A'] + 6
 				elif piece['rotation'] == 1:
@@ -629,24 +563,15 @@ def getInitialBoard():
 	MONSTERS = 0
 	board = []
 	for i in range(BOARDWIDTH):
-		# board.append([BLANK] * BOARDHEIGHT)
 		column = []
 		if i > 6 and MONSTERS * 1.0 / STARTING_VIRUS_COUNT < (i + 1) * 1.0 / BOARDWIDTH:
 			virus_multiplier = virus_multiplier * 1.4
 		for p in range(BOARDHEIGHT):
-
-			# if i > 6 and MONSTERS < STARTING_VIRUS_COUNT:
 			if p > (BOARDHEIGHT - 12) and MONSTERS < STARTING_VIRUS_COUNT and random.randint(1,80) < STARTING_VIRUS_COUNT * virus_multiplier: #bottom 3/5
 				column.append(random.randint(90,92))
 				MONSTERS += 1
 			else:
 				column.append(BLANK)
-			# else:
-			# 	if p > (BOARDHEIGHT - 12) and MONSTERS < STARTING_VIRUS_COUNT and random.randint(1,80) < STARTING_VIRUS_COUNT * virus_multiplier: #bottom 3/5
-			# 		column.append(random.randint(90,92))
-			# 		MONSTERS += 1
-			# 	else:
-			# 		column.append(BLANK)
 		board.append(column)
 	global MONSTERS1
 	MONSTERS1 = MONSTERS
@@ -850,22 +775,8 @@ def shiftRemainingXVert(board, x, y, count):
 			break
 		else:
 			board[x][pullDownY] = board[x][pullDownY-count]
-	# keep_going = True
-	# for pullDownY in range(y, count, -1):
-	# 	if board[x][pullDownY-1] != BLANK and board[x][pullDownY-1] > 11:
-	# 		break
-	# 	else:
-			# board[x][pullDownY] = board[x][pullDownY-count]
 
 def dropOrphan(board, x, y):
-	# board[x][y + 1] = board[x][y]
-	# board[x][y] = BLANK
-	# depth = y + 2
-	# while depth < (BOARDHEIGHT-1) and (board[x][depth] == BLANK):
-	# 	board[x][depth] = board[x][depth-1]
-	# 	board[x][depth-1] = BLANK
-	# 	depth += 1
-	# 	print 'hi'
 	additional = 0
 	drop_height = 0
 	for height in range(y-1, -1, -1):
@@ -898,20 +809,6 @@ def isAlsoOrphan(board, x, y):
 
 
 def findOrphans(board):
-	# y = 0
-	# while y < (BOARDHEIGHT - 1):
-	# 	for x in range(0, BOARDWIDTH):
-	# 		if x == (BOARDWIDTH - 1): # if x is against the right wall
-	# 			if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
-	# 				dropOrphan(board, x, y)
-	# 		elif x == 0: # against the left wall
-	# 			if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11):
-	# 				dropOrphan(board, x, y)
-	# 		else:
-	# 			if (board[x][y]) != BLANK and board[x][y] <= 11 and (board[x][y+1] == BLANK) and (board[x+1][y] == BLANK or board[x+1][y] > 11) and (board[x-1][y] == BLANK or board[x-1][y] > 11):
-	# 				print board[x][y+1], board[x+1][y], board[x-1][y]
-	# 				dropOrphan(board, x, y)
-	# 	y += 1
 	for x in range(BOARDWIDTH):
 		continue_now = True
 		for y in range (BOARDHEIGHT -2, -1, -1):
@@ -960,25 +857,8 @@ def drawBox(boxx, boxy, color, rotation, pill_half, board_number, pixelx=None, p
 	#specified, draw to the pixel coords stored there (for next piece)
 	if color == BLANK:
 		return
-	# if pixelx != None:
-	# 	if board_number == 2:
-	# 		pixelx += 1070
 	if pixelx == None and pixely == None:
 		pixelx, pixely = convertToPixelCoords(boxx, boxy, board_number)
-	# pygame.draw.rect(DISPLAYSURF, COLORS[color], (pixelx + 1, pixely +1, 
-	# 				BOXSIZE - 1, BOXSIZE - 1))
-	# pygame.draw.rect(DISPLAYSURF, LIGHTCOLORS[color], (pixelx + 1, pixely + 1, 
-	# 				BOXSIZE - 4, BOXSIZE - 4))
-	# pygame.draw.arc(DISPLAYSURF, 
-	# 			COLORS[color], 
-	# 			(pixelx + 1, pixely +1, BOXSIZE - 1, BOXSIZE - 1),
-	# 			math.radians(90),
-	# 			math.radians(270),
-	# 			3)
-	# pygame.draw.circle(DISPLAYSURF, 
-	# 			COLORS[color], 
-	# 			(pixelx + (BOXSIZE/2), pixely + (BOXSIZE/2)),
-	# 			10)
 	pill_right = pygame.image.load('%sfs.png' % (color,))
 	pillrect = (pixelx + 1, pixely +1, BOXSIZE, BOXSIZE)
 	if rotation == 0:
@@ -1021,15 +901,8 @@ def drawBox(boxx, boxy, color, rotation, pill_half, board_number, pixelx=None, p
 		else:
 			pill_top = pygame.transform.rotate(pill_right, 90)
 			DISPLAYSURF.blit(pill_top, pillrect)
-		
-	# pygame.draw.arc(DISPLAYSURF, 
-	# 			COLORS[color], 
-	# 			(pixelx + 1, pixely +1, BOXSIZE - 4, BOXSIZE - 4),
-	# 			30,
-	# 			120)
 
 def drawBoxLanded(boxx, boxy, colorOrient, board_number, pixelx=None, pixely=None):
-	# print 'landed box with boxx %s, boxy %s, colorOrient %s, board_number %s, pixelx %s, pixely %s' % (boxx, boxy, colorOrient, board_number, pixelx, pixely)
 	if colorOrient == BLANK:
 		return
 	if pixelx:
@@ -1045,11 +918,6 @@ def drawBoxLanded(boxx, boxy, colorOrient, board_number, pixelx=None, pixely=Non
 		monster_pic = pygame.image.load('virus%sfs.png' % (colorOrient % 3,))
 		monster_rect = (pixelx + 1, pixely +1, BOXSIZE, BOXSIZE)
 		DISPLAYSURF.blit(monster_pic, monster_rect)
-		# pygame.draw.circle(DISPLAYSURF, 
-		# 					COLORS[colorOrient % 3], 
-		# 					(pixelx + (BOXSIZE/2), pixely + (BOXSIZE/2)),
-		# 					10)
-
 
 	pill_right = pygame.image.load('%sfs.png' % (colorOrient % 3,))
 	pillrect = (pixelx + 1, pixely +1, BOXSIZE, BOXSIZE)
@@ -1070,13 +938,6 @@ def drawBoxLanded(boxx, boxy, colorOrient, board_number, pixelx=None, pixely=Non
 
 
 def drawBoard(board, board_number):
-	# draw the border around the board
-	# pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (XMARGIN - 3, TOPMARGIN - 7, 
-	# 	(BOARDWIDTH * BOXSIZE) + 8, (BOARDHEIGHT * BOXSIZE) + 8), 5)
-
-	#fill the background of the board
-	# pygame.draw.rect(DISPLAYSURF, BGCOLOR, (XMARGIN, TOPMARGIN, 
-	# 	BOXSIZE * BOARDWIDTH, BOXSIZE * BOARDHEIGHT))
 	if board_number == 1:
 		background = pygame.image.load('fullscreen-twoplayer.jpg')
 		backgroundRect = background.get_rect()
@@ -1087,8 +948,6 @@ def drawBoard(board, board_number):
 		for y in range(BOARDHEIGHT):
 			if isinstance(board[x][y], int):
 				drawBoxLanded(x, y, board[x][y], board_number)
-				# if board[x][y] < 90:
-				# 	print board[x][y], board_number
 			else:
 				drawBox(x, y, board[x][y], 0, 'A', board_number)
 
